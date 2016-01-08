@@ -170,7 +170,7 @@ CREATE TABLE `PARTIDO` (
   `golesL` int(10) unsigned DEFAULT '0',
   `golesV` int(10) unsigned DEFAULT '0',
   `fecha` date DEFAULT NULL,
-  `PARTIDOcol` varchar(45) DEFAULT NULL,
+  `localidad` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idPartido`),
   KEY `fk_PARTIDO_1_idx` (`idEquipoL`),
   KEY `fk_PARTIDO_2_idx` (`idEquipoV`),
