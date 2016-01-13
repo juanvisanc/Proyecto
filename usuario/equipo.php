@@ -10,22 +10,18 @@
     <link rel="stylesheet" type="text/css" href="./css/equipo.css">
   </head>
   <body>
+    <?php
+    if (!isset($_GET['id'])) {
+      header('Location: index.php');
+    }
+     ?>
     <nav class="navbar navbar-inverse">
       <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Portfolio</a>
-        </div>
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Gallery</a></li>
-            <li><a href="#">Contact</a></li>
+            <li class="active"><a href="index.php">Inicio</a></li>
+            <li><a href="#">Clasificación</a></li>
+            <li><a href="#">Calendario</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
@@ -43,11 +39,10 @@
     <div class="row">
       <div class="col-md-8">
     <?php
-      if (!isset($_GET['id'])) {
-        header('Location: index.php');
-      }else{
+        $connection = new mysqli("localhost", "usufutbol", "usufutbol", "futbol2");
+        //$conection->set_charset("utf8");
+        mysqli_set_charset($connection, "utf8");
 
-        $connection = new mysqli("localhost", "usufutbol", "usufutbol", "futbol");
         $id=$_GET['id'];
 
         if ($connection->connect_errno) {
@@ -59,8 +54,9 @@
           $obj = $result->fetch_object();
           echo "<h1 class='plantilla'>Plantilla del $obj->nombre</h1>";
 
-          $result = $connection->query("SELECT en.nombre, en.apellidos FROM EQUIPO  e, ENTRENADOR en
-          WHERE e.idEquipo=en.idEquipo and e.idEquipo=$id;");
+          $result = $connection->query("SELECT en.nombre, en.apellidos FROM EQUIPO  e,Entrena ent,
+            ENTRENADOR en WHERE e.idEquipo=ent.idEquipo and ent.idEntrenador=en.idEntrenador and
+            e.idEquipo=$id;");
           $obj = $result->fetch_object();
 
           if ($result->num_rows==0) {
@@ -102,10 +98,14 @@
 
 
             }
-          }
+          
         ?>
       </div>
       <div class="col-md-4">Clasificacion Último partido y próximo</div>
     </div>
+    <footer class="container-fluid text-center">
+      <p>Esta página está basada en la colaboración voluntaria,
+        por lo que no se hace responsable de la veracidad de los contenidos publicados.</p>
+    </footer>
   </body>
 </html>
