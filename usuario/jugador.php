@@ -17,11 +17,19 @@
     ?>
     <nav class="navbar navbar-inverse">
       <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="index.php">Inicio</a></li>
+            <li><a href="index.php">Inicio</a></li>
             <li><a href="#">Clasificación</a></li>
             <li><a href="#">Calendario</a></li>
+            <li><a href="registro.php">Registro</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
@@ -67,7 +75,7 @@
                 COUNT(ju.idJugador) AS 'jugado',
                 SUM(ju.goles) as 'gol',SUM(ju.tarjetasA) as 'ta',SUM(ju.tarjetasR) as 'tr'
                 from JUGADOR j,Juego ju WHERE j.idJugador=ju.idJugador and ju.idJugador=$id;");
-                  while($obj = $result->fetch_object()) {
+                  $obj = $result->fetch_object();
 
                     echo "<tr>";
                     echo "<th>Número</th>";
@@ -98,22 +106,41 @@
                     echo "<th>Partidos jugados</th>";
                     echo "<td>".$obj->jugado."</td>";
                     echo "</tr>";
+                    if ($obj->gol==NULL) {
+                      echo "<tr>";
+                      echo "<th>Goles</th>";
+                      echo "<td>0</td>";
+                      echo "</tr>";
+                    }else {
+                      echo "<tr>";
+                      echo "<th>Goles</th>";
+                      echo "<td>".$obj->gol."</td>";
+                      echo "</tr>";
+                    }
 
-                    echo "<tr>";
-                    echo "<th>Goles</th>";
-                    echo "<td>".$obj->gol."</td>";
-                    echo "</tr>";
+                    if ($obj->ta==NULL) {
+                      echo "<tr>";
+                      echo "<th>Tarjetas amarillas</th>";
+                      echo "<td>0</td>";
+                      echo "</tr>";
+                    }else {
+                      echo "<tr>";
+                      echo "<th>Tarjetas amarillas</th>";
+                      echo "<td>".$obj->ta."</td>";
+                      echo "</tr>";
+                    }
+                    if ($obj->tr==NULL) {
+                      echo "<tr>";
+                      echo "<th>Tarjetas rojas</th>";
+                      echo "<td>0</td>";
+                      echo "</tr>";
+                    }else {
+                      echo "<tr>";
+                      echo "<th>Tarjetas rojas</th>";
+                      echo "<td>".$obj->tr."</td>";
+                      echo "</tr>";
+                    }
 
-                    echo "<tr>";
-                    echo "<th>Tarjetas amarillas</th>";
-                    echo "<td>".$obj->ta."</td>";
-                    echo "</tr>";
-
-                    echo "<tr>";
-                    echo "<th>Tarjetas rojas</th>";
-                    echo "<td>".$obj->tr."</td>";
-                    echo "</tr>";
-                }
 
                   echo "</table>";
                   $result->close();
