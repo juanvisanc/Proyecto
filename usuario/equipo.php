@@ -60,7 +60,7 @@
 
         if ($result = $connection->query("SELECT nombre FROM EQUIPO WHERE idEquipo=$id;")){
           $obj = $result->fetch_object();
-          echo "<h1 class='plantilla'>Plantilla del $obj->nombre</h1>";
+          echo "<h1 class='plantilla'><img src='../imagenes/$id.png'>Plantilla del $obj->nombre</h1>";
 
           $result = $connection->query("SELECT en.nombre, en.apellidos FROM EQUIPO  e,Entrena ent,
             ENTRENADOR en WHERE e.idEquipo=ent.idEquipo and ent.idEntrenador=en.idEntrenador and

@@ -60,10 +60,10 @@
               exit();
             }
 
-            if ($result = $connection->query("SELECT j.alias,j.nombre,j.apellidos,e.idEquipo FROM EQUIPO e,JUGADOR j
+            if ($result = $connection->query("SELECT j.alias,j.nombre,j.apellidos,e.idEquipo,e.nombre as 'eq' FROM EQUIPO e,JUGADOR j
               WHERE j.idEquipo=e.idEquipo and j.idJugador=$id;")) {
               $obj = $result->fetch_object();
-              echo "<h1 class='jugador'>$obj->nombre $obj->apellidos <b>'$obj->alias'</b></h1>";
+              echo "<h1 class='jugador'><img src='../imagenes/$obj->idEquipo.png'>$obj->nombre $obj->apellidos <b>'$obj->alias'</b></h1>";
             }
 
           ?>
@@ -75,38 +75,43 @@
                 COUNT(ju.idJugador) AS 'jugado',
                 SUM(ju.goles) as 'gol',SUM(ju.tarjetasA) as 'ta',SUM(ju.tarjetasR) as 'tr'
                 from JUGADOR j,Juego ju WHERE j.idJugador=ju.idJugador and ju.idJugador=$id;");
-                  $obj = $result->fetch_object();
+                  $obje = $result->fetch_object();
+
+                    echo "<tr>";
+                    echo "<th class='col-md-6'>Equipo</th>";
+                    echo "<td>".$obj->eq."<img class='icono' src='../imagenes/$obj->idEquipo.png'></td>";
+                    echo "</tr>";
 
                     echo "<tr>";
                     echo "<th>Número</th>";
-                    echo "<td>".$obj->numero."</td>";
+                    echo "<td>".$obje->numero."</td>";
                     echo "</tr>";
 
                     echo "<tr>";
                     echo "<th>Posición</th>";
-                    echo "<td>".$obj->posicion."</td>";
+                    echo "<td>".$obje->posicion."</td>";
                     echo "</tr>";
 
                     echo "<tr>";
                     echo "<th>Edad</th>";
-                    echo "<td>".$obj->edad."</td>";
+                    echo "<td>".$obje->edad."</td>";
                     echo "</tr>";
 
                     echo "<tr>";
                     echo "<th>Altura</th>";
-                    echo "<td>".$obj->altura." metros</td>";
+                    echo "<td>".$obje->altura." metros</td>";
                     echo "</tr>";
 
                     echo "<tr>";
                     echo "<th>Peso</th>";
-                    echo "<td>".$obj->peso." kilos</td>";
+                    echo "<td>".$obje->peso." kilos</td>";
                     echo "</tr>";
 
                     echo "<tr>";
                     echo "<th>Partidos jugados</th>";
-                    echo "<td>".$obj->jugado."</td>";
+                    echo "<td>".$obje->jugado."</td>";
                     echo "</tr>";
-                    if ($obj->gol==NULL) {
+                    if ($obje->gol==NULL) {
                       echo "<tr>";
                       echo "<th>Goles</th>";
                       echo "<td>0</td>";
@@ -114,11 +119,11 @@
                     }else {
                       echo "<tr>";
                       echo "<th>Goles</th>";
-                      echo "<td>".$obj->gol."</td>";
+                      echo "<td>".$obje->gol."</td>";
                       echo "</tr>";
                     }
 
-                    if ($obj->ta==NULL) {
+                    if ($obje->ta==NULL) {
                       echo "<tr>";
                       echo "<th>Tarjetas amarillas</th>";
                       echo "<td>0</td>";
@@ -126,10 +131,10 @@
                     }else {
                       echo "<tr>";
                       echo "<th>Tarjetas amarillas</th>";
-                      echo "<td>".$obj->ta."</td>";
+                      echo "<td>".$obje->ta."</td>";
                       echo "</tr>";
                     }
-                    if ($obj->tr==NULL) {
+                    if ($obje->tr==NULL) {
                       echo "<tr>";
                       echo "<th>Tarjetas rojas</th>";
                       echo "<td>0</td>";
@@ -137,7 +142,7 @@
                     }else {
                       echo "<tr>";
                       echo "<th>Tarjetas rojas</th>";
-                      echo "<td>".$obj->tr."</td>";
+                      echo "<td>".$obje->tr."</td>";
                       echo "</tr>";
                     }
 
@@ -145,6 +150,7 @@
                   echo "</table>";
                   $result->close();
                   unset($obj);
+                  unset($obje);
                   unset($connection);
 
 
@@ -153,7 +159,7 @@
                 ?>
 
           </div>
-          <div class="col-sm-2"></div>
+
       </div>
     <footer class="container-fluid text-center">
       <p>Esta página está basada en la colaboración voluntaria,
