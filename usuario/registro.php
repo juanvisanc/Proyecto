@@ -12,41 +12,24 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-      </div>
-      <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="nav navbar-nav">
-          <li><a href="index.php">Inicio</a></li>
-          <li><a href="#">Clasificación</a></li>
-          <li><a href="#">Calendario</a></li>
-          <li class="active"><a href="registro.php">Registro</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <?php
+      $connection = new mysqli("localhost", "usufutbol", "usufutbol", "futbol2");
+      //$conection->set_charset("utf8");
+      mysqli_set_charset($connection, "utf8");
 
-  <div class="jumbotron">
-    <div class="container text-center">
-      <h1>Fútbol-7</h1>
-      <h4>Liga Provincial Sevillana</h4>
-    </div>
-  </div>
+      if ($connection->connect_errno) {
+        printf("Connection failed: %s\n", $mysqli->connect_error);
+        exit();
+      }
+  ?>
+  <?php if (!isset($_POST['nombre'])): ?>
+  <?php include 'include.php' ?>
   <div class="row">
     <div class="col-md-12">
       <h3 class="colabora">Colabora con nosotros</h3><hr>
     </div>
     <div class="col-md-6 col-md-offset-3">
-      <form id="registerForm" method="POST">
+      <form id="registerForm" method="POST" action="registro.php">
         <div class="form-group">
           <div class="col-xs-6">
             <label for="InputName">Nombre</label>
@@ -85,7 +68,7 @@
           <div class="col-xs-12">
             <label for="InputEmail">Email</label>
             <div class="input-group">
-              <input type="email" class="form-control" name="email" placeholder="Email">
+              <input type="email" class="form-control" name="email" placeholder="Email" required>
               <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
             </div>
             <br>
@@ -100,8 +83,8 @@
                 <div class="form-group has-feedback">
                   <label class="input-group">
                     <span class="input-group-addon">
-                                  <input type="radio" name="entrenador" value="entrenador" required/>
-                              </span>
+                      <input type="radio" name="entrenador" value="entrenador" required/>
+                    </span>
                     <div class="form-control form-control-static">
                       Entrenador
                     </div>
@@ -129,20 +112,11 @@
           <div class="col-xs-12">
             <label for="InputCity">Equipo</label>
             <?php
-                $connection = new mysqli("localhost", "usufutbol", "usufutbol", "futbol2");
-                //$conection->set_charset("utf8");
-                mysqli_set_charset($connection, "utf8");
-
-                if ($connection->connect_errno) {
-                  printf("Connection failed: %s\n", $mysqli->connect_error);
-                  exit();
-                }
                 $result = $connection->query("SELECT nombre,idEquipo FROM EQUIPO;");
-
             ?>
 
               <div class="input-group">
-                <select name="equipo" class="form-control">
+                <select name="equipo" class="form-control" required>
                   <?php
                   while($obj = $result->fetch_object()) {
                       echo"<option value='$obj->idEquipo'>$obj->nombre</option>";
@@ -166,6 +140,62 @@
   <footer class="container-fluid text-center">
     <p>Esta página está basada en la colaboración voluntaria, por lo que no se hace responsable de la veracidad de los contenidos publicados.</p>
   </footer>
+  <?php else: ?>
+    <?php
+      $nombre=$_POST['nombre'];
+      $apellidos=$_POST['apellidos'];
+      $usuario=$_POST['usuNombre'];
+      $pass=$_POST['password'];
+      $email=$_POST['email'];
+      $entrenador=$_POST['entrenador'];
+      $equipo=$_POST['equipo'];
+
+
+      $result = $connection->query("SELECT e.idEquipo FROM EQUIPO e,Entrena en
+        WHERE e.idEquipo=en.idEquipo and e.idEquipo=$equipo;");
+      $obj = $result->fetch_object();
+
+      $result2 = $connection->query("SELECT e.idEquipo FROM EQUIPO e,Colabora c
+        WHERE e.idEquipo=c.idEquipo and e.idEquipo=$equipo;");
+      $obj2=$result2->fetch_object();
+
+      if ($entrenador=='entrenador') {
+        if ($obj==NULL) {
+          $connection->query("INSERT INTO ENTRENADOR VALUES
+            (NULL,'$nombre','$apellidos','$email','$usuario',md5('$pass'),'$entrenador');");
+          $result3=$connection->query("SELECT idEntrenador FROM ENTRENADOR WHERE nombreUsu='$usuario';" );
+          $obj3=$result3->fetch_object();
+          $connection->query("INSERT INTO Entrena VALUES ($obj3->idEntrenador,$equipo);");
+
+        }else {
+          echo "<p>YA EXISTE ENTRENADOR DE ESE EQUIPO<p>";
+        }
+      }else {
+        if ($obj2==NULL) {
+          $connection->query("INSERT INTO ENTRENADOR VALUES
+            (NULL,'$nombre','$apellidos','$email','$usuario',md5('$pass'),'$entrenador');");
+            $result4=$connection->query("SELECT idEntrenador FROM ENTRENADOR WHERE nombreUsu='$usuario';" );
+            $obj4=$result4->fetch_object();
+            $connection->query("INSERT INTO Colabora VALUES ($obj4->idEntrenador,$equipo);");
+
+        }else {
+          echo "<p>YA EXISTE Colaborador DE ESE EQUIPO<p>";
+          echo $connection->error;
+        }
+      }
+
+      $result->close();
+      $result2->close();
+      $result3->close();
+      $result4->close();
+      unset($obj);
+      unset($obj2);
+      unset($obj3);
+      unset($obj4);
+      unset($connection);
+
+     ?>
+  <?php endif ?>
 </body>
 
 </html>

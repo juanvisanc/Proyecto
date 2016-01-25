@@ -15,35 +15,7 @@
         header('Location: index.php');
       }
     ?>
-    <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-        </div>
-        <div class="collapse navbar-collapse" id="myNavbar">
-          <ul class="nav navbar-nav">
-            <li><a href="index.php">Inicio</a></li>
-            <li><a href="#">Clasificación</a></li>
-            <li><a href="#">Calendario</a></li>
-            <li><a href="registro.php">Registro</a></li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <div class="jumbotron">
-      <div class="container text-center">
-        <h1>Fútbol-7</h1>
-        <h4>Liga Provincial Sevillana</h4>
-      </div>
-    </div>
+    <?php include 'include.php' ?>
       <div class="row">
         <div class="col-sm-2"></div>
         <div class="col-sm-8">
