@@ -1,13 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Fútbol-7 Sevilla</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="./css/equipo.css">
+    <?php include 'cabecera.php' ?>
+  <link rel="stylesheet" type="text/css" href="./css/equipo.css">
   </head>
   <body>
     <?php
@@ -32,21 +27,24 @@
 
         if ($result = $connection->query("SELECT nombre FROM EQUIPO WHERE idEquipo=$id;")){
           $obj = $result->fetch_object();
-          echo "<h1 class='plantilla'><img src='../imagenes/$id.png'>Plantilla del $obj->nombre</h1>";
 
+          echo "<h1 class='plantilla'><img src='../imagenes/$id.png'>Plantilla del $obj->nombre</h1>";
           $result = $connection->query("SELECT en.nombre, en.apellidos FROM EQUIPO  e,Entrena ent,
             ENTRENADOR en WHERE e.idEquipo=ent.idEquipo and ent.idEntrenador=en.idEntrenador and
             e.idEquipo=$id;");
           $obj = $result->fetch_object();
-
           if ($result->num_rows==0) {
             echo "<h4 class='plantilla'>Nombre del entrenador: No tenemos datos aún</h4>";
           }else {
             echo "<h4 class='plantilla'>Nombre del entrenador: $obj->nombre $obj->apellidos</h4>";
           }
-          $result->close();
-          unset($obj);
-    ?>
+
+          if($result3 = $connection->query("SELECT en.nombreUsu as usuario FROM Entrena ent,
+              ENTRENADOR en WHERE ent.idEntrenador=en.idEntrenador and ent.idEquipo=$id;")){
+            $obj3 = $result3->fetch_object();
+          }
+
+        ?>
             <table class="table table-hover">
               <thead>
                 <tr>
@@ -54,26 +52,44 @@
                   <th>Nombre</th>
                   <th>Alias</th>
                   <th>Ficha</th>
+                  <?php if (isset($_SESSION["usuario"])){
+                    if ($_SESSION["rol"]==='admin' or ($result->num_rows===1 and
+                    $_SESSION["usuario"]===$obj3->usuario)) {
+                    ?>
+                  <th>Editar</th>
+                  <th>Eliminar</th>
+                  <?php }} ?>
                 </tr>
               </thead>
 
     <?php
 
-              $result = $connection->query("select j.nombre,j.apellidos,j.alias,j.idJugador from JUGADOR j,EQUIPO e
+              $result2 = $connection->query("select j.nombre,j.apellidos,j.alias,j.idJugador from JUGADOR j,EQUIPO e
                 WHERE j.idEquipo=e.idEquipo and e.idEquipo=$id;");
-              while($obj = $result->fetch_object()) {
+
+              while($obj2 = $result2->fetch_object()) {
 
                   echo "<tr>";
-                  echo "<td>".$obj->apellidos."</td>";
-                  echo "<td>".$obj->nombre."</td>";
-                  echo "<td>".$obj->alias."</td>";
-                  echo "<td><a href='jugador.php?id=$obj->idJugador'>Ver</a></td></tr>";
-
+                  echo "<td>".$obj2->apellidos."</td>";
+                  echo "<td>".$obj2->nombre."</td>";
+                  echo "<td>".$obj2->alias."</td>";
+                  echo "<td><a href='jugador.php?id=$obj2->idJugador'>Ver</a></td>";
+                  if (isset($_SESSION["usuario"])){
+                    if ($_SESSION["rol"]==='admin' or ($result->num_rows===1 and
+                    $_SESSION["usuario"]===$obj3->usuario)) {
+                    echo "<td><a href='jugador.php?id=$obj2->idJugador'>Edita</a></td>";
+                    echo "<td><a href='jugador.php?id=$obj2->idJugador'>Elimina</a></td></tr>";
+                  }else {
+                    echo "</tr>";
+                  }
+                }
               }
 
               echo "</table>";
               $result->close();
               unset($obj);
+              $result2->close();
+              unset($obj2);
               unset($connection);
 
 

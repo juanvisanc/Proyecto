@@ -1,18 +1,29 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <title>Fútbol-7 Sevilla</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="./css/registro.css">
+  <?php include 'cabecera.php' ?>
+<link rel="stylesheet" type="text/css" href="css/registro.css">
 </head>
+<script>
+$(function() {
+  $("#dialog-message").dialog({
+      modal: true,
+      buttons: {
+        Ok: function() {
+          $( this ).dialog( "close" );
+        }
+      },
+      open: function(event, ui){
+       setTimeout("$('#dialog-message').dialog('close')",5000);
+      }
+  });
+});
+
+</script>
 
 <body>
   <?php
+
       $connection = new mysqli("localhost", "usufutbol", "usufutbol", "futbol2");
       //$conection->set_charset("utf8");
       mysqli_set_charset($connection, "utf8");
@@ -23,7 +34,11 @@
       }
   ?>
   <?php if (!isset($_POST['nombre'])): ?>
-  <?php include 'include.php' ?>
+  <?php include 'include.php';
+    if (isset($_SESSION["usuario"])) {
+      header('Location: index.php');
+    }
+  ?>
   <div class="row">
     <div class="col-md-12">
       <h3 class="colabora">Colabora con nosotros</h3><hr>
@@ -99,7 +114,7 @@
                     <div class="form-control form-control-static">
                       Colaborador
                     </div>
-                    <span class="glyphicon form-control-feedback "></span>
+                    <span class="glyphicon form-control-feedback"></span>
                   </label>
                 </div>
               </div>
@@ -135,7 +150,9 @@
           </div>
         </div>
       </form>
+
     </div>
+
   </div>
   <footer class="container-fluid text-center">
     <p>Esta página está basada en la colaboración voluntaria, por lo que no se hace responsable de la veracidad de los contenidos publicados.</p>
@@ -150,48 +167,70 @@
       $entrenador=$_POST['entrenador'];
       $equipo=$_POST['equipo'];
 
+      $result = $connection->query("SELECT nombreUsu FROM ENTRENADOR;");
 
-      $result = $connection->query("SELECT e.idEquipo FROM EQUIPO e,Entrena en
-        WHERE e.idEquipo=en.idEquipo and e.idEquipo=$equipo;");
-      $obj = $result->fetch_object();
+      while ($obj = $result->fetch_object()) {
+        if ($obj->nombreUsu===$usuario) {
+          include 'incluregis.php';
+          echo "<div id='dialog-message' title='Error.'>
+            <p>
+              El nombre de usuario que has elegido ya existe en nuestra base de datos. Por favor, escoja otro
+              nombre de usuario. Gracias.
+            </p>
+            </div>";
+        }
+      }
 
-      $result2 = $connection->query("SELECT e.idEquipo FROM EQUIPO e,Colabora c
-        WHERE e.idEquipo=c.idEquipo and e.idEquipo=$equipo;");
-      $obj2=$result2->fetch_object();
-
-      if ($entrenador=='entrenador') {
+        if ($entrenador=='entrenador') {
+          $result = $connection->query("SELECT idEquipo FROM Entrena
+          WHERE idEquipo=$equipo;");
+          $obj = $result->fetch_object();
         if ($obj==NULL) {
           $connection->query("INSERT INTO ENTRENADOR VALUES
             (NULL,'$nombre','$apellidos','$email','$usuario',md5('$pass'),'$entrenador');");
           $result3=$connection->query("SELECT idEntrenador FROM ENTRENADOR WHERE nombreUsu='$usuario';" );
           $obj3=$result3->fetch_object();
           $connection->query("INSERT INTO Entrena VALUES ($obj3->idEntrenador,$equipo);");
-
+          $result3->close();
+          unset($obj3);
+          echo "<div id='dialog-message' title='Registro correcto.'>
+            <p>
+              ¡Gracias por colaborar con nosotros! Ya puede loguearse.
+            </p>
+            </div>";
         }else {
-          echo "<p>YA EXISTE ENTRENADOR DE ESE EQUIPO<p>";
+          include 'incluregis.php';
+
+          echo "<div id='dialog-message' title='Error.'>
+            <p>
+              El equipo que has elegido ya posee un entrenador. Por favor, contacte con nosotros en
+              caso que los datos sean incorrectos. Gracias.
+            </p>
+            </div>";
+
         }
       }else {
+        $result2 = $connection->query("SELECT e.idEquipo FROM EQUIPO e,Colabora c
+          WHERE e.idEquipo=c.idEquipo and e.idEquipo=$equipo;");
+        $obj2=$result2->fetch_object();
         if ($obj2==NULL) {
           $connection->query("INSERT INTO ENTRENADOR VALUES
             (NULL,'$nombre','$apellidos','$email','$usuario',md5('$pass'),'$entrenador');");
             $result4=$connection->query("SELECT idEntrenador FROM ENTRENADOR WHERE nombreUsu='$usuario';" );
             $obj4=$result4->fetch_object();
             $connection->query("INSERT INTO Colabora VALUES ($obj4->idEntrenador,$equipo);");
-
+            $result4->close();
+            unset($obj4);
         }else {
           echo "<p>YA EXISTE Colaborador DE ESE EQUIPO<p>";
           echo $connection->error;
         }
+        $result2->close();
+        unset($obj2);
       }
 
       $result->close();
-      $result2->close();
-      $result3->close();
-      $result4->close();
       unset($obj);
-      unset($obj2);
-      unset($obj3);
-      unset($obj4);
       unset($connection);
 
      ?>

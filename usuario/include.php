@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
+
     <?php
     session_start();
     if (isset($_POST["usuario"])) {
@@ -28,15 +22,15 @@
       //SQL Injection Possible
       //Check http://php.net/manual/es/mysqli.prepare.php for more security
       if ($result = $connection->query($consulta)) {
-
+          $obj = $result->fetch_object();
           //No rows returned
           if ($result->num_rows===0) {
             echo "LOGIN INVALIDO";
           } else {
             //VALID LOGIN. SETTING SESSION VARS
+            $_SESSION["rol"]=$obj->rol;
             $_SESSION["usuario"]=$_POST["usuario"];
             $_SESSION["language"]="es";
-
             header("Location: index.php");
           }
 
@@ -45,6 +39,7 @@
       }
   }
     if (isset($_SESSION["usuario"])) {
+      $usu=$_SESSION["usuario"];
       echo "  <nav class='navbar navbar-inverse'>
           <div class='container-fluid'>
             <div class='navbar-header'>
@@ -61,6 +56,7 @@
                 <li><a href='#'>Calendario</a></li>
               </ul>
               <ul class='nav navbar-nav navbar-right'>
+                <li><a href='#'><span class='glyphicon glyphicon-user' style='padding-right:5px'></span>".$_SESSION['usuario']."</a></li>
                 <li><a href='logout.php'><span class='glyphicon glyphicon-log-in'></span> Logout</a></li>
               </ul>
             </div>
@@ -95,6 +91,7 @@
             </div>
           </div>
         </nav>";
+
     }
     ?>
     <div class="jumbotron">
@@ -103,5 +100,3 @@
         <h4>Liga Provincial Sevillana</h4>
       </div>
     </div>
-  </body>
-</html>
