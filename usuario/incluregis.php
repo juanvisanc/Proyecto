@@ -13,9 +13,9 @@
             <span class="input-group-addon"><span class="glyphicon glyphicon-pencil"></span></span>
           </div>
           <br>
-          <label for="InputName">Nombre de usuario</label>
+          <label for="InputName">Apellidos</label>
           <div class="input-group">
-            <input type="text" class="form-control" name="usuNombre" placeholder="Nombre de usuario" required>
+            <input type="text" class="form-control" name="apellidos" placeholder="Apellidos" required>
             <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
           </div>
           <hr>
@@ -24,9 +24,9 @@
 
       <div class="form-group">
         <div class="col-xs-6">
-          <label for="InputName">Apellidos</label>
+          <label for="InputName">Nombre de usuario</label>
           <div class="input-group">
-            <input type="text" class="form-control" name="apellidos" placeholder="Apellidos" required>
+            <input type="text" class="form-control" name="nombreUsu" placeholder="Usuario" required>
             <span class="input-group-addon"><span class="glyphicon glyphicon-pencil"></span></span>
           </div>
           <br>

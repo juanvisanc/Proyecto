@@ -5,6 +5,22 @@
   <link rel="stylesheet" type="text/css" href="./css/index.css">
 </head>
 <body>
+  <script>
+  $(function() {
+    $("#dialog-message").dialog({
+        modal: true,
+        buttons: {
+          Ok: function() {
+            $( this ).dialog( "close" );
+          }
+        },
+        open: function(event, ui){
+         setTimeout("$('#dialog-message').dialog('close')",5000);
+        }
+    });
+  });
+
+  </script>
   <?php
 
   include 'include.php';

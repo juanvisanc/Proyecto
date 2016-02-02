@@ -5,6 +5,22 @@
   <link rel="stylesheet" type="text/css" href="./css/equipo.css">
   </head>
   <body>
+    <script>
+    $(function() {
+      $("#dialog-message").dialog({
+          modal: true,
+          buttons: {
+            Ok: function() {
+              $( this ).dialog( "close" );
+            }
+          },
+          open: function(event, ui){
+           setTimeout("$('#dialog-message').dialog('close')",5000);
+          }
+      });
+    });
+
+    </script>
     <?php
     if (!isset($_GET['id'])) {
       header('Location: index.php');
@@ -33,6 +49,12 @@
             ENTRENADOR en WHERE e.idEquipo=ent.idEquipo and ent.idEntrenador=en.idEntrenador and
             e.idEquipo=$id;");
           $obj = $result->fetch_object();
+
+          $result = $connection->query("SELECT en.nombre, en.apellidos FROM EQUIPO  e,Entrena ent,
+            ENTRENADOR en WHERE e.idEquipo=ent.idEquipo and ent.idEntrenador=en.idEntrenador and
+            e.idEquipo=$id;");
+
+
           if ($result->num_rows==0) {
             echo "<h4 class='plantilla'>Nombre del entrenador: No tenemos datos aún</h4>";
           }else {
@@ -44,6 +66,11 @@
             $obj3 = $result3->fetch_object();
           }
 
+          if($result4 = $connection->query("SELECT en.nombreUsu as usuario FROM Colabora c,
+              ENTRENADOR en WHERE c.idEntrenador=en.idEntrenador and c.idEquipo=$id;")){
+            $obj4 = $result4->fetch_object();
+          }
+
         ?>
             <table class="table table-hover">
               <thead>
@@ -53,12 +80,16 @@
                   <th>Alias</th>
                   <th>Ficha</th>
                   <?php if (isset($_SESSION["usuario"])){
-                    if ($_SESSION["rol"]==='admin' or ($result->num_rows===1 and
-                    $_SESSION["usuario"]===$obj3->usuario)) {
+                    if (($_SESSION["rol"]==='admin' or ($result3->num_rows===1 and
+                    $_SESSION["usuario"]===$obj3->usuario)) or ($_SESSION["rol"]==='admin'
+                    or ($result4->num_rows===1 and $_SESSION["usuario"]===$obj4->usuario))) {
                     ?>
                   <th>Editar</th>
                   <th>Eliminar</th>
-                  <?php }} ?>
+              <?php
+                  }
+                }
+              ?>
                 </tr>
               </thead>
 
@@ -75,10 +106,12 @@
                   echo "<td>".$obj2->alias."</td>";
                   echo "<td><a href='jugador.php?id=$obj2->idJugador'>Ver</a></td>";
                   if (isset($_SESSION["usuario"])){
-                    if ($_SESSION["rol"]==='admin' or ($result->num_rows===1 and
-                    $_SESSION["usuario"]===$obj3->usuario)) {
+                    if (($_SESSION["rol"]==='admin' or ($result3->num_rows===1 and
+                    $_SESSION["usuario"]===$obj3->usuario)) or ($_SESSION["rol"]==='admin'
+                    or ($result4->num_rows===1 and $_SESSION["usuario"]===$obj4->usuario))) {
                     echo "<td><a href='jugador.php?id=$obj2->idJugador'>Edita</a></td>";
                     echo "<td><a href='jugador.php?id=$obj2->idJugador'>Elimina</a></td></tr>";
+
                   }else {
                     echo "</tr>";
                   }
@@ -86,6 +119,11 @@
               }
 
               echo "</table>";
+              
+              $result3->close();
+              unset($obj3);
+              $result4->close();
+              unset($obj4);
               $result->close();
               unset($obj);
               $result2->close();

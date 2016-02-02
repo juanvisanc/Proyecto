@@ -53,9 +53,9 @@ $(function() {
               <span class="input-group-addon"><span class="glyphicon glyphicon-pencil"></span></span>
             </div>
             <br>
-            <label for="InputName">Nombre de usuario</label>
+            <label for="InputName">Apellidos</label>
             <div class="input-group">
-              <input type="text" class="form-control" name="usuNombre" placeholder="Nombre de usuario" required>
+              <input type="text" class="form-control" name="apellidos" placeholder="Apellidos" required>
               <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
             </div>
             <hr>
@@ -64,9 +64,9 @@ $(function() {
 
         <div class="form-group">
           <div class="col-xs-6">
-            <label for="InputName">Apellidos</label>
+            <label for="InputName">Nombre de usuario</label>
             <div class="input-group">
-              <input type="text" class="form-control" name="apellidos" placeholder="Apellidos" required>
+              <input type="text" class="form-control" name="nombreUsu" placeholder="Usuario" required>
               <span class="input-group-addon"><span class="glyphicon glyphicon-pencil"></span></span>
             </div>
             <br>
@@ -161,25 +161,22 @@ $(function() {
     <?php
       $nombre=$_POST['nombre'];
       $apellidos=$_POST['apellidos'];
-      $usuario=$_POST['usuNombre'];
+      $usuario=$_POST['nombreUsu'];
       $pass=$_POST['password'];
       $email=$_POST['email'];
       $entrenador=$_POST['entrenador'];
       $equipo=$_POST['equipo'];
 
-      $result = $connection->query("SELECT nombreUsu FROM ENTRENADOR;");
-
-      while ($obj = $result->fetch_object()) {
-        if ($obj->nombreUsu===$usuario) {
-          include 'incluregis.php';
-          echo "<div id='dialog-message' title='Error.'>
-            <p>
-              El nombre de usuario que has elegido ya existe en nuestra base de datos. Por favor, escoja otro
-              nombre de usuario. Gracias.
-            </p>
-            </div>";
-        }
-      }
+      $result = $connection->query("SELECT nombreUsu FROM ENTRENADOR where nombreUsu='$usuario';");
+      if ($result->num_rows===1) {
+        include 'incluregis.php';
+        echo "<div id='dialog-message' title='Error.'>
+          <p>
+            El nombre de usuario que has elegido ya existe en nuestra base de datos. Por favor, escoja otro
+            nombre de usuario. Gracias.
+          </p>
+          </div>";
+      }else{
 
         if ($entrenador=='entrenador') {
           $result = $connection->query("SELECT idEquipo FROM Entrena
@@ -193,6 +190,7 @@ $(function() {
           $connection->query("INSERT INTO Entrena VALUES ($obj3->idEntrenador,$equipo);");
           $result3->close();
           unset($obj3);
+          include 'incluregis.php';
           echo "<div id='dialog-message' title='Registro correcto.'>
             <p>
               ¡Gracias por colaborar con nosotros! Ya puede loguearse.
@@ -210,8 +208,8 @@ $(function() {
 
         }
       }else {
-        $result2 = $connection->query("SELECT e.idEquipo FROM EQUIPO e,Colabora c
-          WHERE e.idEquipo=c.idEquipo and e.idEquipo=$equipo;");
+        $result2 = $connection->query("SELECT c.idEquipo FROM Colabora c
+          WHERE c.idEquipo=$equipo;");
         $obj2=$result2->fetch_object();
         if ($obj2==NULL) {
           $connection->query("INSERT INTO ENTRENADOR VALUES
@@ -221,14 +219,26 @@ $(function() {
             $connection->query("INSERT INTO Colabora VALUES ($obj4->idEntrenador,$equipo);");
             $result4->close();
             unset($obj4);
+            include 'incluregis.php';
+            echo "<div id='dialog-message' title='Registro correcto.'>
+              <p>
+                ¡Gracias por colaborar con nosotros! Ya puede loguearse.
+              </p>
+              </div>";
         }else {
-          echo "<p>YA EXISTE Colaborador DE ESE EQUIPO<p>";
+          include 'incluregis.php';
+          echo "<div id='dialog-message' title='Error.'>
+            <p>
+              El equipo que has elegido ya posee un colaborador. Por favor, contacte con nosotros en
+              caso que los datos sean incorrectos. Gracias.
+            </p>
+            </div>";
           echo $connection->error;
         }
         $result2->close();
         unset($obj2);
       }
-
+    }
       $result->close();
       unset($obj);
       unset($connection);

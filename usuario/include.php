@@ -25,7 +25,11 @@
           $obj = $result->fetch_object();
           //No rows returned
           if ($result->num_rows===0) {
-            echo "LOGIN INVALIDO";
+            echo "<div id='dialog-message' title='Error.'>
+              <p>
+                El nombre de usuario o contraseña que has introducido es incorrecto.
+              </p>
+              </div>";
           } else {
             //VALID LOGIN. SETTING SESSION VARS
             $_SESSION["rol"]=$obj->rol;
@@ -39,7 +43,6 @@
       }
   }
     if (isset($_SESSION["usuario"])) {
-      $usu=$_SESSION["usuario"];
       echo "  <nav class='navbar navbar-inverse'>
           <div class='container-fluid'>
             <div class='navbar-header'>
