@@ -2,31 +2,38 @@
 <html>
 <head>
   <?php include 'cabecera.php' ?>
-<link rel="stylesheet" type="text/css" href="./css/jugador.css">
+    <link rel="stylesheet" type="text/css" href="./css/jugador.css">
 </head>
-  <body>
-    <script>
+<body>
+
+  <!-- script dialog. Se pondra en include?? -->
+  <script>
     $(function() {
       $("#dialog-message").dialog({
-          modal: true,
-          buttons: {
-            Ok: function() {
-              $( this ).dialog( "close" );
-            }
-          },
-          open: function(event, ui){
-           setTimeout("$('#dialog-message').dialog('close')",5000);
+        modal: true,
+        buttons: {
+          Ok: function() {
+            $(this).dialog("close");
           }
+        },
+        open: function(event, ui) {
+          setTimeout("$('#dialog-message').dialog('close')", 5000);
+        }
       });
     });
+  </script>
 
-    </script>
-    <?php
+
+  <?php
+      //Para entrar en esta página hay que mandar id del jugador, si no para atras.
       if (!isset($_GET['id'])) {
         header('Location: index.php');
       }
+
+      //include comun
+      include 'include.php';
     ?>
-    <?php include 'include.php' ?>
+
       <div class="row">
         <div class="col-sm-2"></div>
         <div class="col-sm-8">
@@ -43,17 +50,23 @@
               exit();
             }
 
-            if ($result = $connection->query("SELECT j.alias,j.nombre,j.apellidos,e.idEquipo,e.nombre as 'eq' FROM EQUIPO e,JUGADOR j
+            //sacamos para titulo el nombre y equipo del jugador
+            if ($result = $connection->query("SELECT j.alias,j.nombre,j.apellidos,e.idEquipo,e.nombre
+              as 'eq' FROM EQUIPO e,JUGADOR j
               WHERE j.idEquipo=e.idEquipo and j.idJugador=$id;")) {
-              $obj = $result->fetch_object();
-              echo "<h1 class='jugador'><img src='../imagenes/$obj->idEquipo.png'>$obj->nombre $obj->apellidos <b>'$obj->alias'</b></h1>";
+                $obj = $result->fetch_object();
+
+                echo "<h1 class='jugador'>
+                <img src='../imagenes/$obj->idEquipo.png'>$obj->nombre $obj->apellidos <b>'$obj->alias'</b>
+                </h1>";
             }
 
           ?>
-          <table class="table table-hover">
+            <table class="table table-hover">
 
-            <?php
+              <?php
 
+                //sacamos caracteristicas y estadisticas del jugador
                 $result = $connection->query("select j.numero,j.posicion,j.edad,j.altura,j.peso,
                 COUNT(ju.idJugador) AS 'jugado',
                 SUM(ju.goles) as 'gol',SUM(ju.tarjetasA) as 'ta',SUM(ju.tarjetasR) as 'tr'
@@ -94,6 +107,8 @@
                     echo "<th>Partidos jugados</th>";
                     echo "<td>".$obje->jugado."</td>";
                     echo "</tr>";
+
+                    //en caso que no haya jugado ningun partido gol es null, al igual q TR y TA. Ponemos 0
                     if ($obje->gol==NULL) {
                       echo "<tr>";
                       echo "<th>Goles</th>";
@@ -141,12 +156,12 @@
 
                 ?>
 
-          </div>
+        </div>
 
       </div>
-    <footer class="container-fluid text-center">
-      <p>Esta página está basada en la colaboración voluntaria,
-        por lo que no se hace responsable de la veracidad de los contenidos publicados.</p>
-    </footer>
-  </body>
+      <footer class="container-fluid text-center">
+        <p>Esta página está basada en la colaboración voluntaria, por lo que no se hace responsable de la veracidad de los contenidos publicados.</p>
+      </footer>
+</body>
+
 </html>

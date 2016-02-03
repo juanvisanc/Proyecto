@@ -1,6 +1,9 @@
+<?php
 
-    <?php
+  //iniciamos sesion
     session_start();
+
+    //si introducimos datos en el login
     if (isset($_POST["usuario"])) {
       $usuario=$_POST['usuario'];
       $pass=$_POST['password'];
@@ -14,27 +17,43 @@
       }
 
       //MAKING A SELECT QUERY
-      //Password coded with md5 at the database. Look for better options
+      //Consulta con el usuario y contraseña que hemos pasado
       $consulta="select * from ENTRENADOR where
       nombreUsu='$usuario' and password=md5('$pass');";
 
-      //Test if the query was correct
-      //SQL Injection Possible
-      //Check http://php.net/manual/es/mysqli.prepare.php for more security
+      //Comprovamos el logueo
       if ($result = $connection->query($consulta)) {
           $obj = $result->fetch_object();
-          //No rows returned
+
+          //No nos hemos logueado bien
           if ($result->num_rows===0) {
+
+            //salta el dialog modal
             echo "<div id='dialog-message' title='Error.'>
               <p>
                 El nombre de usuario o contraseña que has introducido es incorrecto.
               </p>
               </div>";
           } else {
-            //VALID LOGIN. SETTING SESSION VARS
+
+            //en caso de loguearnos bien iniciamos sesion
             $_SESSION["rol"]=$obj->rol;
             $_SESSION["usuario"]=$_POST["usuario"];
             $_SESSION["language"]="es";
+
+            //Vemos si usuario es entrenador o colaborador y metemos su equipo en la sesion
+            if ($_SESSION["rol"]==='colaborador') {
+              $result2 = $connection->query("SELECT idEquipo from Colabora where idEntrenador=$obj->idEntrenador;");
+              $obj2=$result2->fetch_object();
+              $_SESSION["equipo"]=$obj2->idEquipo;
+
+            }elseif ($_SESSION["rol"]==='entrenador') {
+              $result3 = $connection->query("SELECT idEquipo from Entrena where idEntrenador=$obj->idEntrenador;");
+              $obj3=$result3->fetch_object();
+              $_SESSION["equipo"]=$obj3->idEquipo;
+            }
+
+            //Una vez bien logueados, nos manda al index.
             header("Location: index.php");
           }
 
@@ -42,6 +61,7 @@
         echo "Wrong Query";
       }
   }
+  //Si la sesion esta abierta:
     if (isset($_SESSION["usuario"])) {
       echo "  <nav class='navbar navbar-inverse'>
           <div class='container-fluid'>
@@ -66,6 +86,8 @@
           </div>
         </nav>";
     }else {
+
+      //si la sesion no esta abierta:
       echo "<nav class='navbar navbar-inverse'>
           <div class='container-fluid'>
             <div class='navbar-header'>
@@ -97,9 +119,9 @@
 
     }
     ?>
-    <div class="jumbotron">
-      <div class="container text-center">
-        <h1>Fútbol-7</h1>
-        <h4>Liga Provincial Sevillana</h4>
-      </div>
+  <div class="jumbotron">
+    <div class="container text-center">
+      <h1>Fútbol-7</h1>
+      <h4>Liga Provincial Sevillana</h4>
     </div>
+  </div>
