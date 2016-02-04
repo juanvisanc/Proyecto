@@ -57,7 +57,7 @@
                   <label for="InputName">Apellidos</label>
                   <div class="input-group">
                     <input type="text" class="form-control" name="apellidos" placeholder="Apellidos" required>
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-pencil"></span></span>
                   </div>
                   <hr>
                 </div>
@@ -68,7 +68,7 @@
                   <label for="InputName">Nombre de usuario</label>
                   <div class="input-group">
                     <input type="text" class="form-control" name="nombreUsu" placeholder="Usuario" required>
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-pencil"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
                   </div>
                   <br>
                   <label for="InputPassword">Contraseña</label>

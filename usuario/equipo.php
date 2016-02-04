@@ -24,7 +24,7 @@
       });
     });
   </script>
-  
+
   <?php
     //Para entrar en esta página hay que mandar id del equipo, si no para atras.
     if (!isset($_GET['id'])) {
@@ -98,13 +98,16 @@
                   echo "<td>".$obj2->apellidos."</td>";
                   echo "<td>".$obj2->nombre."</td>";
                   echo "<td>".$obj2->alias."</td>";
-                  echo "<td><a href='jugador.php?id=$obj2->idJugador'>Ver</a></td>";
+                  echo "<td><a href='jugador.php?id=$obj2->idJugador'>
+                  <span class='glyphicon glyphicon-eye-open'/></a></td>";
 
                   //En caso q este logueado y sea administrador o de ese equipo pueda editar
                   if (isset($_SESSION["usuario"])){
                     if ($_SESSION["rol"]==='admin' or $_SESSION["equipo"]===$id) {
-                    echo "<td><a href='../colaborador/edita.php?id=$obj2->idJugador&equipo=$id'>Edita</a></td>";
-                    echo "<td><a href='../colaborador/elimina.php?id=$obj2->idJugador&equipo=$id'>Elimina</a></td></tr>";
+                    echo "<td><a href='../colaborador/edita.php?id=$obj2->idJugador&equipo=$id'>
+                    <span class='glyphicon glyphicon-edit'/></a></td>";
+                    echo "<td><a href='../colaborador/elimina.php?id=$obj2->idJugador&equipo=$id'>
+                    <span class='glyphicon glyphicon-trash'/></a></td></tr>";
 
                   }else {
                     echo "</tr>";
@@ -112,6 +115,18 @@
                 }
               }
 
+              if (isset($_SESSION["usuario"])){
+                if ($_SESSION["rol"]==='admin' or $_SESSION["equipo"]===$id) {
+                  echo "<tr>";
+                  echo "<td></td>";
+                  echo "<td></td>";
+                  echo "<td></td>";
+                  echo "<td></td>";
+                  echo "<th>Añadir</th>";
+                  echo "<td><a href='../colaborador/elimina.php?equipo=$id'>
+                  <span class='glyphicon glyphicon-plus'/></a></td></tr>";
+                }
+              }
               echo "</table>";
 
               $result->close();

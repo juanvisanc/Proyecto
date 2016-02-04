@@ -47,7 +47,7 @@
               $obj2=$result2->fetch_object();
               $_SESSION["equipo"]=$obj2->idEquipo;
 
-            }elseif ($_SESSION["rol"]==='entrenador') {
+            }else{
               $result3 = $connection->query("SELECT idEquipo from Entrena where idEntrenador=$obj->idEntrenador;");
               $obj3=$result3->fetch_object();
               $_SESSION["equipo"]=$obj3->idEquipo;
@@ -77,6 +77,7 @@
                 <li><a href='index.php'>Inicio</a></li>
                 <li><a href='#'>Clasificación</a></li>
                 <li><a href='#'>Calendario</a></li>
+                <li><a href='contacto.php'>Contacto</a></li>
               </ul>
               <ul class='nav navbar-nav navbar-right'>
                 <li><a href='#'><span class='glyphicon glyphicon-user' style='padding-right:5px'></span>".$_SESSION['usuario']."</a></li>
@@ -103,6 +104,7 @@
                 <li><a href='#'>Clasificación</a></li>
                 <li><a href='#'>Calendario</a></li>
                 <li><a href='registro.php'>Registro</a></li>
+                <li><a href='contacto.php'>Contacto</a></li>
               </ul>
               <form class='navbar-form navbar-right' role='search' action='' method='post'>
                       <div class='form-group'>
