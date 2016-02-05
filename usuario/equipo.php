@@ -123,7 +123,7 @@
                   echo "<td></td>";
                   echo "<td></td>";
                   echo "<th>Añadir</th>";
-                  echo "<td><a href='../colaborador/elimina.php?equipo=$id'>
+                  echo "<td><a href='../colaborador/crea.php?id=$id'>
                   <span class='glyphicon glyphicon-plus'/></a></td></tr>";
                 }
               }

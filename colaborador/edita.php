@@ -24,6 +24,7 @@
     $jugador=$_GET['id'];
     $result = $connection->query("SELECT idJugador FROM JUGADOR WHERE
       idEquipo=$equipoUsu and idJugador=$jugador;");
+
       if ($result->num_rows !==0 or $_SESSION["rol"]==='admin') {
   ?>
 

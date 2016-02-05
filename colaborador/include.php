@@ -17,9 +17,20 @@ if (isset($_SESSION['usuario'])) {
           <ul class='nav navbar-nav'>
             <li><a href='../usuario/index.php'>Inicio</a></li>
             <li><a href='#'>Clasificación</a></li>
-            <li><a href='#'>Calendario</a></li>
-            <li><a href='../usuario/contacto.php'>Contacto</a></li>
-          </ul>
+            <li><a href='#'>Calendario</a></li>";
+            if ($_SESSION['rol']==='admin') {
+              echo "
+              <li class='dropdown'>
+              <a href='#' class='dropdown-toggle' data-toggle='dropdown'>Administración</a>
+              <ul class='dropdown-menu'>
+                <li><a href='../admin/usuarios.php'>Usuarios</a></li>
+                <li><a href='#'>Equipos</a></li>
+              </ul>
+            </li>";
+            }else {
+              echo"<li><a href='../usuario/contacto.php'>Contacto</a></li>";
+            }
+          echo "</ul>
           <ul class='nav navbar-nav navbar-right'>
             <li><a href='#'><span class='glyphicon glyphicon-user' style='padding-right:5px'>
             </span>".$_SESSION['usuario']."</a></li>
