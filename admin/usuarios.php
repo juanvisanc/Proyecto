@@ -2,7 +2,7 @@
 <html>
 <head>
   <?php include '../colaborador/cabecera.php' ?>
-    <link rel="stylesheet" type="text/css" href="../usuario/css/registro.css">
+    <link rel="stylesheet" type="text/css" href="../admin/css/usuarios.css">
 </head>
   <body>
     <?php
@@ -21,11 +21,11 @@
 
       ?>
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-sm-12">
           <h3 class="colabora">Usuarios registrados</h3>
           <hr>
         </div>
-        <div class="col-md-9 col-md-offset-1">
+          <div class="col-sm-12">
           <table class="table table-hover">
             <thead>
               <tr>
@@ -34,6 +34,8 @@
                 <th>Correo</th>
                 <th>Rol</th>
                 <th>Equipo</th>
+                <th>Editar</th>
+                <th>Eliminar<th>
               </tr>
             </thead>
 
@@ -51,14 +53,28 @@
                       $result2 = $connection->query("SELECT e.nombre FROM Entrena en,EQUIPO e
                          where en.idEquipo=e.idEquipo and en.idEntrenador=$obj->idEntrenador;");
                       $obj2=$result2->fetch_object();
-                      echo "<td>".$obj2->nombre."</td></tr>";
+                      echo "<td>".$obj2->nombre."</td>";
                     }else{
                       $result3 = $connection->query("SELECT e.nombre FROM Colabora c ,EQUIPO e
                          where c.idEquipo=e.idEquipo and c.idEntrenador=$obj->idEntrenador;");
                       $obj3=$result3->fetch_object();
-                      echo "<td>".$obj3->nombre."</td></tr>";
+                      echo "<td>".$obj3->nombre."</td>";
+
                     }
+                    echo "<td><a href='../admin/editausu.php?id=$obj->idEntrenador'>
+                    <span class='glyphicon glyphicon-edit'/></a></td>";
+                    echo "<td><a href='../admin/eliminausu.php?id=$obj->idEntrenador'>
+                    <span class='glyphicon glyphicon-trash'/></a></td></tr>";
                 }
+                echo "<tr>";
+                echo "<td></td>";
+                echo "<td></td>";
+                echo "<td></td>";
+                echo "<td></td>";
+                echo "<td></td>";
+                echo "<th>Añadir</th>";
+                echo "<td><a href='creausu.php'>
+                <span class='glyphicon glyphicon-plus'/></a></td></tr>";
                 echo "</table>";
 
               }

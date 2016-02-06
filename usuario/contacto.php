@@ -12,15 +12,17 @@
         //$conection->set_charset("utf8");
         mysqli_set_charset($connection, "utf8");
 
-        if($result = $connection->query("SELECT correo FROM ENTRENADOR WHERE rol='admin';")){
+        if($result = $connection->query("SELECT correo FROM ENTRENADOR WHERE rol='admin' limit 1;")){
           $obj=$result->fetch_object();
         ?>
 
         <div class="row">
-          <div class="col-sm-2"></div>
-          <div class="col-sm-8">
-            <h1 class="colabora">Contacta con nosotros<h1>
+          <div class="col-sm-12">
+            <h3 class="colabora">Contacta con nosotros<h3>
             <hr>
+          </div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
             <p class="lead">Si tienes alguna duda, sugerencia, proposición o simplemente quieres
               mostrar tu opinión, no dudes en mandar un correo a nuestro administrador.<p>
             <?php echo "<p class='lead'><span class='glyphicon glyphicon-envelope'></span>
