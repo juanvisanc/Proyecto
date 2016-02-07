@@ -80,7 +80,7 @@
                 if ($_SESSION['rol']==='admin') {
                   echo "
                   <li class='dropdown'>
-                  <a href='#' class='dropdown-toggle' data-toggle='dropdown'>Administración</a>
+                  <a href='#' class='dropdown-toggle' data-toggle='dropdown'>Administración <span class='glyphicon  glyphicon-menu-down'></span></a>
                   <ul class='dropdown-menu'>
                     <li><a href='../admin/usuarios.php'>Usuarios</a></li>
                     <li><a href='#'>Equipos</a></li>

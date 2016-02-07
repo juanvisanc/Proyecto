@@ -18,7 +18,20 @@
         setTimeout("$('#dialog-message').dialog('close')", 5000);
       }
     });
-  });
+    $("#entre").click(function(){
+      $('#entrena').show();
+      $('#dos').attr("disabled", false)
+      $('#colabora').hide();
+      $('#uno').attr("disabled", true);
+  		});
+
+    $("#cola").click(function(){
+      $('#entrena').hide();
+      $('#dos').attr("disabled", true)
+      $('#colabora').show();
+      $('#uno').attr("disabled", false);
+  		});
+   	});
 </script>
 
 <body>
@@ -67,7 +80,7 @@
                 <div class="col-xs-6">
                   <label for="InputName">Nombre de usuario</label>
                   <div class="input-group">
-                    <input type="text" class="form-control" name="nombreUsu" placeholder="Usuario" required>
+                    <input type="text" id='nickname' class="form-control" name="nombreUsu" placeholder="Usuario" required>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
                   </div>
                   <br>
@@ -101,7 +114,7 @@
                           <span class="input-group-addon">
                       <input type="radio" name="entrenador" value="entrenador" required/>
                     </span>
-                          <div class="form-control form-control-static">
+                          <div class="form-control form-control-static" id='entre'>
                             Entrenador
                           </div>
                           <span class="glyphicon form-control-feedback "></span>
@@ -112,7 +125,7 @@
                           <span class="input-group-addon">
                                   <input type="radio" name="entrenador" value="colaborador" required/>
                               </span>
-                          <div class="form-control form-control-static">
+                          <div class="form-control form-control-static" id='cola'>
                             Colaborador
                           </div>
                           <span class="glyphicon form-control-feedback"></span>
@@ -124,18 +137,40 @@
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="form-group" id='colabora' style="display:none">
                 <div class="col-xs-12">
                   <label for="InputCity">Equipo</label>
                   <?php
-                $result = $connection->query("SELECT nombre,idEquipo FROM EQUIPO;");
+                $result2 = $connection->query("SELECT * FROM EQUIPO
+                  WHERE idEquipo NOT IN (SELECT idEquipo FROM Colabora);");
             ?>
 
                     <div class="input-group">
-                      <select name="equipo" class="form-control" required>
+                      <select name="equipo" class="form-control" id='uno' required>
                         <?php
-                  while($obj = $result->fetch_object()) {
-                      echo"<option value='$obj->idEquipo'>$obj->nombre</option>";
+                  while($obj2 = $result2->fetch_object()) {
+                      echo"<option value='$obj2->idEquipo'>$obj2->nombre</option>";
+                  }
+                  ?>
+                      </select>
+                      <span class="input-group-addon"><span class="glyphicon  glyphicon-menu-down"></span></span>
+                    </div>
+                    <br>
+                </div>
+              </div>
+              <div class="form-group" id='entrena' style="display:none">
+                <div class="col-xs-12">
+                  <label for="InputCity">Equipo</label>
+                  <?php
+                $result3 = $connection->query("SELECT * FROM EQUIPO
+                  WHERE idEquipo NOT IN (SELECT idEquipo FROM Entrena);");
+            ?>
+
+                    <div class="input-group">
+                      <select name="equipo" class="form-control" id='dos' required>
+                        <?php
+                  while($obj3 = $result3->fetch_object()) {
+                      echo"<option value='$obj3->idEquipo'>$obj3->nombre</option>";
                   }
                   ?>
                       </select>
@@ -180,11 +215,6 @@
               }else{
 
                 if ($entrenador=='entrenador') {
-                  $result = $connection->query("SELECT idEquipo FROM Entrena
-                  WHERE idEquipo=$equipo;");
-                  $obj = $result->fetch_object();
-
-                  if ($obj==NULL) {
                     $connection->query("INSERT INTO ENTRENADOR VALUES
                       (NULL,'$nombre','$apellidos','$email','$usuario',md5('$pass'),'$entrenador');");
                     $result3=$connection->query("SELECT idEntrenador FROM ENTRENADOR WHERE nombreUsu='$usuario';" );
@@ -199,24 +229,13 @@
                     </p>
                     </div>";
                   }else {
-                    include 'incluregis.php';
-
-                    echo "<div id='dialog-message' title='Error.'>
-                    <p>
-                      El equipo que has elegido ya posee un entrenador. Por favor, contacte con nosotros en
-                      caso que los datos sean incorrectos. Gracias.
-                    </p>
-                    </div>";
-
-                  }
-
-                }else {
                   $result2 = $connection->query("SELECT c.idEquipo FROM Colabora c
                     WHERE c.idEquipo=$equipo;");
-                  $obj2=$result2->fetch_object();
-                  if ($obj2==NULL) {
+                    $obj2=$result2->fetch_object();
                     $connection->query("INSERT INTO ENTRENADOR VALUES
                     (NULL,'$nombre','$apellidos','$email','$usuario',md5('$pass'),'$entrenador');");
+                    $result2->close();
+                    unset($obj2);
                     $result4=$connection->query("SELECT idEntrenador FROM ENTRENADOR WHERE nombreUsu='$usuario';" );
                     $obj4=$result4->fetch_object();
                     $connection->query("INSERT INTO Colabora VALUES ($obj4->idEntrenador,$equipo);");
@@ -228,20 +247,9 @@
                       ¡Gracias por colaborar con nosotros! Ya puede loguearse.
                     </p>
                     </div>";
-                  }else {
-                    include 'incluregis.php';
-                    echo "<div id='dialog-message' title='Error.'>
-                    <p>
-                    El equipo que has elegido ya posee un colaborador. Por favor, contacte con nosotros en
-                    caso que los datos sean incorrectos. Gracias.
-                    </p>
-                    </div>";
-                    echo $connection->error;
                   }
-                  $result2->close();
-                  unset($obj2);
                 }
-              }
+
               $result->close();
               unset($obj);
               unset($connection);

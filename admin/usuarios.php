@@ -31,6 +31,7 @@
               <tr>
                 <th>Nombre</th>
                 <th>Apellidos</th>
+                <th>Usuario</th>
                 <th>Correo</th>
                 <th>Rol</th>
                 <th>Equipo</th>
@@ -46,6 +47,7 @@
                     echo "<tr>";
                     echo "<td>".$obj->nombre."</td>";
                     echo "<td>".$obj->apellidos."</td>";
+                    echo "<td>".$obj->nombreUsu."</td>";
                     echo "<td>".$obj->correo."</td>";
                     echo "<td>".$obj->rol."</td>";
 
@@ -67,6 +69,7 @@
                     <span class='glyphicon glyphicon-trash'/></a></td></tr>";
                 }
                 echo "<tr>";
+                echo "<td></td>";
                 echo "<td></td>";
                 echo "<td></td>";
                 echo "<td></td>";

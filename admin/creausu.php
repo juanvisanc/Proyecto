@@ -33,7 +33,7 @@ $(document).ready(function(){
     <?php
 
     include '../colaborador/include.php';
-    if (isset($_GET['id']) and isset($_SESSION["usuario"]) and $_SESSION['rol']==='admin' ) {
+    if (isset($_SESSION["usuario"]) and $_SESSION['rol']==='admin' ) {
       $connection = new mysqli("localhost", "usufutbol", "usufutbol", "futbol2");
       //$conection->set_charset("utf8");
       mysqli_set_charset($connection, "utf8");
@@ -42,31 +42,28 @@ $(document).ready(function(){
         printf("Connection failed: %s\n", $mysqli->connect_error);
         exit();
       }
-      $entrenador=$_GET['id'];
-      $result = $connection->query("SELECT * from ENTRENADOR WHERE idEntrenador=$entrenador;");
-      $obj = $result->fetch_object();
+
       ?>
       <div class="row">
         <div class="col-sm-12 text-center">
-          <h3>Editar usuario</h3>
+          <h3>Crear usuario</h3>
           <hr>
         </div>
           <div class="col-sm-2"></div>
           <div class="col-sm-8">
-          <form id="registerForm" method="POST" action="editadousu.php">
-            <input style="display:none" name="id" <?php echo "value='$obj->idEntrenador'"; ?>>
+          <form id="registerForm" method="POST" action="creadousu.php">
             <div class="form-group">
               <div class="col-xs-6">
                 <label for="InputName">Nombre</label>
                 <div class="input-group">
-                  <input type="text" class="form-control" name="nombre" <?php echo "value='$obj->nombre'"; ?>
+                  <input type="text" class="form-control" name="nombre"
                   placeholder="Nombre" required>
                   <span class="input-group-addon"><span class="glyphicon glyphicon-pencil"></span></span>
                 </div>
                 <br>
                 <label for="InputName">Apellidos</label>
                 <div class="input-group">
-                  <input type="text" class="form-control" name="apellidos" <?php echo "value='$obj->apellidos'"; ?>
+                  <input type="text" class="form-control" name="apellidos"
                   placeholder="Apellidos" required>
                   <span class="input-group-addon"><span class="glyphicon glyphicon-pencil"></span></span>
                 </div>
@@ -78,16 +75,15 @@ $(document).ready(function(){
               <div class="col-xs-6">
                 <label for="InputName">Nombre de usuario</label>
                 <div class="input-group">
-                  <input type="text" class="form-control" name="nombreUsu" <?php echo "value='$obj->nombreUsu'"; ?>
+                  <input type="text" class="form-control" name="nombreUsu"
                   placeholder="Usuario" required>
                   <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
                 </div>
                 <br>
-                <label for="InputEmail">Email</label>
+                <label for="InputPassword">Contraseña</label>
                 <div class="input-group">
-                  <input type="email" class="form-control" name="email" <?php echo "value='$obj->correo'"; ?>
-                  placeholder="Email" required>
-                  <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+                  <input type="password" class="form-control" name="password" placeholder="Contraseña" required>
+                  <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
                 </div>
                 <hr>
               </div>
@@ -95,15 +91,19 @@ $(document).ready(function(){
 
             <div class="form-group">
               <div class="col-xs-12">
+                <label for="InputEmail">Email</label>
+                <div class="input-group">
+                  <input type="email" class="form-control" name="email" placeholder="Email" required>
+                  <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+                </div>
+                <br>
                 <label for="InputStreetName">Rol</label>
                 <div class="input-group">
                   <div class="form-inline required">
                     <div class="form-group has-feedback">
                       <label class="input-group">
                         <span class="input-group-addon">
-                    <input type="radio" name="rol" value="admin" <?php if ($obj->rol==='admin') {
-                      echo "checked='checked'";
-                      } ?> required/>
+                    <input type="radio" name="rol" value="admin"  required/>
                   </span>
                         <div class="form-control form-control-static" id='admin'>
                           Administrador
@@ -114,9 +114,7 @@ $(document).ready(function(){
                     <div class="form-group has-feedback">
                       <label class="input-group">
                         <span class="input-group-addon">
-                    <input type="radio" name="rol" value="entrenador" <?php if ($obj->rol==='entrenador') {
-                      echo "checked='checked'";
-                      } ?>
+                    <input type="radio" name="rol" value="entrenador"
                     required/>
                   </span>
                         <div class="form-control form-control-static" id='entre'>
@@ -128,9 +126,7 @@ $(document).ready(function(){
                     <div class="form-group has-feedback ">
                       <label class="input-group">
                         <span class="input-group-addon">
-                                <input type="radio" name="rol" value="colaborador" <?php if ($obj->rol==='colaborador') {
-                                  echo "checked='checked'";
-                                  } ?>
+                                <input type="radio" name="rol" value="colaborador"
                             required/>
                             </span>
                         <div class="form-control form-control-static" id='cola'>
@@ -195,7 +191,7 @@ $(document).ready(function(){
           </div>
         </div>
           <?php
-          $result->close();
+
           unset($obj);
           $result2->close();
           unset($obj2);
