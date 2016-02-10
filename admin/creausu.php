@@ -4,6 +4,18 @@
   <?php include '../colaborador/cabecera.php'; ?>
     <link rel="stylesheet" type="text/css" href="../admin/css/usuarios.css">
 </head>
+<style media="screen">
+  .active{
+    box-shadow:inset 0 1px 1px green;
+  }
+  .noactive{
+    box-shadow: inset 0 1px 1px red;
+  }
+  #error{
+    font-size: 0.8em;
+    margin-bottom: 0.4em;
+  }
+</style>
 <script>
 $(document).ready(function(){
 	$("#admin").click(function(){
@@ -26,6 +38,26 @@ $(document).ready(function(){
     $('#colabora').show();
     $('#uno').attr("disabled", false);
 		});
+
+    $('#user').change(function(){
+      var usuario=$(this).val();
+      $.ajax({
+        url: 'comprueba_usuario.php',
+        type: 'POST',
+        data: {usuario: usuario}
+      })
+      .done(function(data) {
+        if (data==1) {
+          $('#user').removeClass('noactive').addClass('active');
+          $('#submit').attr('disabled', false);
+          $('#error').text("Usuario válido");
+        }else {
+          $('#submit').attr('disabled', true);
+          $('#user').removeClass('active').addClass('noactive');
+          $('#error').text("Usuario no válido");
+        };
+      });
+    });
  	});
 
 </script>
@@ -75,11 +107,12 @@ $(document).ready(function(){
               <div class="col-xs-6">
                 <label for="InputName">Nombre de usuario</label>
                 <div class="input-group">
-                  <input type="text" class="form-control" name="nombreUsu"
+                  <input type="text" class="form-control" name="nombreUsu" id='user'
                   placeholder="Usuario" required>
                   <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
                 </div>
-                <br>
+                <div id='error'></div>
+
                 <label for="InputPassword">Contraseña</label>
                 <div class="input-group">
                   <input type="password" class="form-control" name="password" placeholder="Contraseña" required>

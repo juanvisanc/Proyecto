@@ -4,31 +4,6 @@
   <?php include '../colaborador/cabecera.php'; ?>
     <link rel="stylesheet" type="text/css" href="../admin/css/usuarios.css">
 </head>
-<script>
-$(document).ready(function(){
-	$("#admin").click(function(){
-		$('#entrena').show();
-    $('#dos').attr("disabled", false)
-    $('#colabora').hide();
-    $('#uno').attr("disabled", true);
-		});
-
-  $("#entre").click(function(){
-    $('#entrena').show();
-    $('#dos').attr("disabled", false)
-    $('#colabora').hide();
-    $('#uno').attr("disabled", true);
-		});
-
-  $("#cola").click(function(){
-    $('#entrena').hide();
-    $('#dos').attr("disabled", true)
-    $('#colabora').show();
-    $('#uno').attr("disabled", false);
-		});
- 	});
-
-</script>
   <body>
     <?php
 
@@ -46,6 +21,65 @@ $(document).ready(function(){
       $result = $connection->query("SELECT * from ENTRENADOR WHERE idEntrenador=$entrenador;");
       $obj = $result->fetch_object();
       ?>
+      <?php if ($obj->rol==='admin' or $obj->rol==='entrenador'): ?>
+      <script>
+      $(document).ready(function(){
+        $('#uno').attr("disabled", true);
+        $('#dos').attr("disabled", false);
+      	$("#admin").click(function(){
+      		$('#entrena').show();
+          $('#dos').attr("disabled", false);
+          $('#colabora').hide();
+          $('#uno').attr("disabled", true);
+      		});
+
+        $("#entre").click(function(){
+          $('#entrena').show();
+          $('#dos').attr("disabled", false);
+          $('#colabora').hide();
+          $('#uno').attr("disabled", true);
+      		});
+
+        $("#cola").click(function(){
+          $('#entrena').hide();
+          $('#dos').attr("disabled", true);
+          $('#colabora').show();
+          $('#uno').attr("disabled", false);
+      		});
+       	});
+
+      </script>
+    <?php else: ?>
+      <script>
+      $(document).ready(function(){
+        $('#uno').attr("disabled", false);
+        $('#dos').attr("disabled", true);
+      	$("#admin").click(function(){
+      		$('#entrena').show();
+          $('#dos').attr("disabled", false);
+          $('#colabora').hide();
+          $('#uno').attr("disabled", true);
+      		});
+
+        $("#entre").click(function(){
+          $('#entrena').show();
+          $('#dos').attr("disabled", false);
+          $('#colabora').hide();
+          $('#uno').attr("disabled", true);
+      		});
+
+        $("#cola").click(function(){
+          $('#entrena').hide();
+          $('#dos').attr("disabled", true);
+          $('#colabora').show();
+          $('#uno').attr("disabled", false);
+      		});
+       	});
+
+      </script>
+
+      <?php endif ?>
+
       <div class="row">
         <div class="col-sm-12 text-center">
           <h3>Editar usuario</h3>
@@ -155,6 +189,12 @@ $(document).ready(function(){
                   <div class="input-group">
                     <select name="equipo" class="form-control" id='uno' required>
                       <?php
+                      if ($obj->rol==='colaborador') {
+                      $result3 = $connection->query("SELECT e.idEquipo,e.nombre FROM Colabora c, EQUIPO e
+                        WHERE c.idEquipo=e.idEquipo and c.idEntrenador=$entrenador ");
+                        $obj3=$result3->fetch_object();
+                        echo"<option value='$obj3->idEquipo' selected='selected'>$obj3->nombre</option>";
+                      }
                 while($obj2 = $result2->fetch_object()) {
                     echo"<option value='$obj2->idEquipo'>$obj2->nombre</option>";
                 }
@@ -169,6 +209,8 @@ $(document).ready(function(){
               <div class="col-xs-12">
                 <label for="InputCity">Equipo</label>
                 <?php
+                $result2->close();
+                unset($obj2);
               $result3 = $connection->query("SELECT * FROM EQUIPO
                 WHERE idEquipo NOT IN (SELECT idEquipo FROM Entrena);");
           ?>
@@ -176,9 +218,19 @@ $(document).ready(function(){
                   <div class="input-group">
                     <select name="equipo" class="form-control" id='dos' required>
                       <?php
+                      if ($obj->rol==='entrenador' or $obj->rol==='admin') {
+                      $result4 = $connection->query("SELECT e.idEquipo,e.nombre FROM Entrena en, EQUIPO e
+                        WHERE en.idEquipo=e.idEquipo and en.idEntrenador=$entrenador ");
+                        $obj4=$result4->fetch_object();
+                        echo"<option value='$obj4->idEquipo' selected='selected'>$obj4->nombre</option>";
+                        $result4->close();
+                        unset($obj4);
+                      }
                 while($obj3 = $result3->fetch_object()) {
                     echo"<option value='$obj3->idEquipo'>$obj3->nombre</option>";
                 }
+                $result3->close();
+                unset($obj3);
                 ?>
                     </select>
                     <span class="input-group-addon"><span class="glyphicon  glyphicon-menu-down"></span></span>
@@ -197,10 +249,6 @@ $(document).ready(function(){
           <?php
           $result->close();
           unset($obj);
-          $result2->close();
-          unset($obj2);
-          $result3->close();
-          unset($obj3);
           unset($connection);
         }else {
           header("Location: ../usuario/index.php");

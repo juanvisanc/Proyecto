@@ -63,6 +63,13 @@
   }
   //Si la sesion esta abierta:
     if (isset($_SESSION["usuario"])) {
+      $connection = new mysqli("localhost", "usufutbol", "usufutbol", "futbol2");
+      //$conection->set_charset("utf8");
+      mysqli_set_charset($connection, "utf8");
+
+      $usu=$_SESSION['usuario'];
+      $result = $connection->query("SELECT idEntrenador from ENTRENADOR where nombreUsu='$usu';");
+      $obj = $result->fetch_object();
       echo "  <nav class='navbar navbar-inverse'>
           <div class='container-fluid'>
             <div class='navbar-header'>
@@ -91,12 +98,16 @@
                 }
               echo "</ul>
               <ul class='nav navbar-nav navbar-right'>
-                <li><a href='#'><span class='glyphicon glyphicon-user' style='padding-right:5px'></span>".$_SESSION['usuario']."</a></li>
+                <li><a href='../colaborador/usuario.php?id=$obj->idEntrenador'><span class='glyphicon glyphicon-user' style='padding-right:5px'></span>".$_SESSION['usuario']."</a></li>
                 <li><a href='logout.php'><span class='glyphicon glyphicon-log-in'></span> Logout</a></li>
               </ul>
             </div>
           </div>
         </nav>";
+
+        $result->close();
+        unset($obj);
+        unset($connection);
     }else {
 
       //si la sesion no esta abierta:
