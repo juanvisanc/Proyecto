@@ -5,6 +5,12 @@
   <?php include 'cabecera.php' ?>
     <link rel="stylesheet" type="text/css" href="css/registro.css">
 </head>
+<style media="screen">
+  #error{
+    font-size: 0.8em;
+    margin-bottom: 0.4em;
+  }
+</style>
 <script>
   $(function() {
     $("#dialog-message").dialog({
@@ -31,6 +37,26 @@
       $('#colabora').show();
       $('#uno').attr("disabled", false);
   		});
+
+      $('#user').change(function(){
+        var usuario=$(this).val();
+        $.ajax({
+          url: '../admin/comprueba_usuario.php',
+          type: 'POST',
+          data: {usuario: usuario}
+        })
+        .done(function(data) {
+          if (data==1) {
+            $('#validar').removeClass('has-error').addClass('has-success');
+            $('#submit').attr('disabled', false);
+            $('#error').text("Usuario válido");
+          }else {
+            $('#submit').attr('disabled', true);
+            $('#validar').removeClass('has-success').addClass('has-error');
+            $('#error').text("Usuario no válido");
+          };
+        });
+      });
    	});
 </script>
 
@@ -79,11 +105,11 @@
               <div class="form-group">
                 <div class="col-xs-6">
                   <label for="InputName">Nombre de usuario</label>
-                  <div class="input-group">
-                    <input type="text" id='nickname' class="form-control" name="nombreUsu" placeholder="Usuario" required>
+                  <div class="input-group" id='validar'>
+                    <input type="text" id='user' class="form-control" name="nombreUsu" placeholder="Usuario" required>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
                   </div>
-                  <br>
+                  <div id='error'></div>
                   <label for="InputPassword">Contraseña</label>
                   <div class="input-group">
                     <input type="password" class="form-control" name="password" placeholder="Contraseña" required>
@@ -203,17 +229,6 @@
               $entrenador=$_POST['entrenador'];
               $equipo=$_POST['equipo'];
 
-              $result = $connection->query("SELECT nombreUsu FROM ENTRENADOR where nombreUsu='$usuario';");
-              if ($result->num_rows===1) {
-                include 'incluregis.php';
-                echo "<div id='dialog-message' title='Error.'>
-                  <p>
-                    El nombre de usuario que has elegido ya existe en nuestra base de datos. Por favor, escoja otro
-                    nombre de usuario. Gracias.
-                  </p>
-                  </div>";
-              }else{
-
                 if ($entrenador=='entrenador') {
                     $connection->query("INSERT INTO ENTRENADOR VALUES
                       (NULL,'$nombre','$apellidos','$email','$usuario',md5('$pass'),'$entrenador');");
@@ -222,12 +237,13 @@
                     $connection->query("INSERT INTO Entrena VALUES ($obj3->idEntrenador,$equipo);");
                     $result3->close();
                     unset($obj3);
-                    include 'incluregis.php';
-                    echo "<div id='dialog-message' title='Registro correcto.'>
-                    <p>
-                    ¡Gracias por colaborar con nosotros! Ya puede loguearse.
-                    </p>
-                    </div>";
+                    session_start();
+                    $_SESSION["rol"]=$entrenador;
+                    $_SESSION["usuario"]=$usuario;
+                    $_SESSION["language"]="es";
+                    $_SESSION["equipo"]=$equipo;
+
+                    header('Location: index.php');
                   }else {
                   $result2 = $connection->query("SELECT c.idEquipo FROM Colabora c
                     WHERE c.idEquipo=$equipo;");
@@ -241,18 +257,14 @@
                     $connection->query("INSERT INTO Colabora VALUES ($obj4->idEntrenador,$equipo);");
                     $result4->close();
                     unset($obj4);
-                    include 'incluregis.php';
-                    echo "<div id='dialog-message' title='Registro correcto.'>
-                    <p>
-                      ¡Gracias por colaborar con nosotros! Ya puede loguearse.
-                    </p>
-                    </div>";
-                  }
-                }
+                    session_start();
+                    $_SESSION["rol"]=$entrenador;
+                    $_SESSION["usuario"]=$usuario;
+                    $_SESSION["language"]="es";
+                    $_SESSION["equipo"]=$equipo;
 
-              $result->close();
-              unset($obj);
-              unset($connection);
+                    header('Location: index.php');
+                  }
 
           ?>
       <?php endif ?>

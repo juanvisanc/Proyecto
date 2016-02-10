@@ -30,6 +30,38 @@
             <h3 class="colabora"><?php echo "$obj->nombre $obj->apellidos"; ?></h3>
             <hr>
           </div>
+          <div class="col-sm-2"></div>
+          <div class="col-sm-8">
+            <table class="table table-hover">
+              <?php
+              echo "<tr>";
+              echo "<th class='col-md-6'>Nombre</th>";
+              echo "<td>".$obj->nombre."</td>";
+              echo "</tr>";
+
+              echo "<tr>";
+              echo "<th>Apellidos</th>";
+              echo "<td>".$obj->apellidos."</td>";
+              echo "</tr>";
+
+              echo "<tr>";
+              echo "<th>Nombre de usuario</th>";
+              echo "<td>".$obj->nombreUsu."</td>";
+              echo "</tr>";
+
+              echo "<tr>";
+              echo "<th>Email</th>";
+              echo "<td>".$obj->correo."</td>";
+              echo "</tr>";
+
+              echo "<tr>";
+              echo "<th>Colabora como</th>";
+              echo "<td>".$obj->rol."</td>";
+              echo "</tr>";
+
+               ?>
+             </table>
+          </div>
         </div>
 
     <?php }else {

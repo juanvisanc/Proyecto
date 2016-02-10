@@ -112,10 +112,12 @@
               <div class="col-xs-6">
                 <label for="InputName">Nombre de usuario</label>
                 <div class="input-group">
-                  <input type="text" class="form-control" name="nombreUsu" <?php echo "value='$obj->nombreUsu'"; ?>
-                  placeholder="Usuario" required>
+                  <input type="text" disabled="true" class="form-control" name="nombreUsu" <?php echo "value='$obj->nombreUsu'"; ?>
+                  placeholder="Usuario" >
                   <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
                 </div>
+                <input type="text" style='display:none' class="form-control" name="nombreUsu" <?php echo "value='$obj->nombreUsu'"; ?>
+                placeholder="Usuario" required>
                 <br>
                 <label for="InputEmail">Email</label>
                 <div class="input-group">

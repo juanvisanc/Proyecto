@@ -1,9 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <?php include 'cabecera.php' ?>
-    <link rel="stylesheet" type="text/css" href="./css/contacto.css">
+  <?php include 'cabecera.php'; ?>
+    <link rel="stylesheet" type="text/css" href="../usuario/css/contacto.css">
 </head>
+<script>
+  $(function() {
+    $("#dialog-message").dialog({
+      modal: true,
+      buttons: {
+        Ok: function() {
+          $(this).dialog("close");
+        }
+      },
+      open: function(event, ui) {
+        setTimeout("$('#dialog-message').dialog('close')", 5000);
+      }
+    });
+  });
+</script>
   <body>
     <?php
         include 'include.php';

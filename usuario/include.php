@@ -91,6 +91,7 @@
                   <ul class='dropdown-menu'>
                     <li><a href='../admin/usuarios.php'>Usuarios</a></li>
                     <li><a href='#'>Equipos</a></li>
+                    <li><a href='../admin/partidos.php'>Partidos</a></li>
                   </ul>
                 </li>";
                 }else {

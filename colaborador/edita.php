@@ -89,7 +89,7 @@
 
             <div class="form-group">
               <div class="col-xs-3">
-                <label for="InputEmail">Número</label>
+                <label>Número</label>
                 <div class="input-group">
                   <input type="number" class="form-control" name="numero" <?php echo "value='$obj->numero'"?>
                   placeholder="Numero" required>
@@ -97,7 +97,7 @@
                 </div>
               </div>
               <div class="col-xs-3">
-                <label for="InputEmail">Edad</label>
+                <label>Edad</label>
                 <div class="input-group">
                   <input type="number" class="form-control" name="edad" <?php echo "value='$obj->edad'"?>
                   placeholder="Edad" required>
