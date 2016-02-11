@@ -193,7 +193,7 @@
                       <?php
                       if ($obj->rol==='colaborador') {
                       $result3 = $connection->query("SELECT e.idEquipo,e.nombre FROM Colabora c, EQUIPO e
-                        WHERE c.idEquipo=e.idEquipo and c.idEntrenador=$entrenador ");
+                        WHERE c.idEquipo=e.idEquipo and c.idEntrenador=$entrenador;");
                         $obj3=$result3->fetch_object();
                         echo"<option value='$obj3->idEquipo' selected='selected'>$obj3->nombre</option>";
                       }

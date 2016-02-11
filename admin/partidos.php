@@ -18,6 +18,7 @@
           printf("Connection failed: %s\n", $mysqli->connect_error);
           exit();
         }
+        $result = $connection->query("SELECT * FROM EQUIPO;");
       ?>
     <div class="row">
       <div class="col-sm-12">
@@ -26,13 +27,18 @@
       </div>
       <div class="col-md-2"></div>
       <div class="col-md-8">
-        <form id="registerForm" method="POST" action="registro.php">
+        <form id="registerForm" method="POST" action="inserta_partido.php">
           <div class="form-group">
             <div class="col-xs-6">
               <label>Local</label>
               <div class="input-group">
                 <select class="form-control" name="local" required>
-                  <option>El ronquillo</option>
+                  <option>---Elige equipo---</option>
+                  <?php
+                  while($obj = $result->fetch_object()) {
+                      echo"<option value='$obj->idEquipo'>$obj->nombre</option>";
+                  }
+                   ?>
                 </select>
                 <span class="input-group-addon"><span class="glyphicon  glyphicon-menu-down"></span></span>
               </div>
@@ -40,7 +46,13 @@
               <label>Visitante</label>
               <div class="input-group">
                 <select class="form-control" name="visitante" required>
-                  <option>El ronquillo</option>
+                  <option>---Elige equipo---</option>
+                  <?php
+                  $result = $connection->query("SELECT * FROM EQUIPO;");
+                  while($obj = $result->fetch_object()) {
+                      echo"<option value='$obj->idEquipo'>$obj->nombre</option>";
+                  }
+                   ?>
                 </select>
                 <span class="input-group-addon"><span class="glyphicon  glyphicon-menu-down"></span></span>
               </div>
@@ -89,7 +101,9 @@
       </div>
       <br>
     <?php
-        }
+  }else {
+    header('Location: ../usuario/index.php');
+  }
       ?>
       <footer class="container-fluid text-center">
         <p>Esta página está basada en la colaboración voluntaria, por lo que no se hace responsable de la veracidad de los contenidos publicados.</p>
