@@ -9,6 +9,11 @@
   #resultado{
     padding-left:4%;
   }
+  .form-control {
+    min-width: 0;
+    width: 5em;
+    display: inline;
+}
 </style>
 <script>
   $(function() {
@@ -51,20 +56,26 @@
       <h3 class="colabora">Jornada <?php echo $id ?></h3>
       <hr>
     </div>
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
       <table class="table table-hover">
         <thead>
           <tr>
             <th>Local</th>
-            <th>Resultado</th>
+            <th>Goles Local</th>
+            <th>Goles Visitante</th>
             <th>Visitante</th>
             <th>Fecha</th>
+            <?php
+              if (isset($_SESSION['usuario']) and $_SESSION['rol']=='admin') {
+                ?>
+                <th><th>
+                  <?php } ?>
           </tr>
         </thead>
         <?php
-        $result = $connection->query("SELECT p.*, l.nombre as local,v.nombre as visitante
-          FROM EQUIPO l, PARTIDO p, EQUIPO v
+        $result = $connection->query("SELECT p.*, l.nombre as local,v.nombre as visitante,l.idEquipo as lo,
+          v.idEquipo as vi FROM EQUIPO l, PARTIDO p, EQUIPO v
           WHERE l.idEquipo=p.idEquipoL and p.idEquipoV=v.idEquipo and jornada=$id;");
 
           if ($result->num_rows===0) {
@@ -77,25 +88,26 @@
 
           if (!isset($_SESSION['usuario'])){
           while($obj = $result->fetch_object()) {
-            echo "<tr><td>$obj->local</td><td id='resultado'>$obj->golesL:$obj->golesV</td>
+            echo "<tr><td>$obj->local</td><td id='resultado'>$obj->golesL</td><td id='resultado'>$obj->golesV</td>
             <td>$obj->visitante</td><td>$obj->fecha</td></tr>";
           }
         }elseif (isset($_SESSION['usuario']) and $_SESSION['rol']=='admin') {
           while($obj = $result->fetch_object()) {
-            echo "<tr><td><a href='#'>$obj->local</a></td><td id='resultado'>$obj->golesL:$obj->golesV</td>
-            <td><a href='#'>$obj->visitante</a></td><td>$obj->fecha</td></tr>";
+            echo "<tr><td>$obj->local</td><td><input type='number' class='form-control' value='$obj->golesL' name='golesL' required></td>
+            <td><input type='text' class='form-control' value='$obj->golesV' name='golesV' min='0' required></td>
+            <td>$obj->visitante</td><td>$obj->fecha</td><td>
+            <input type='submit' name='enviar' id='submit' value='Guardar' class='btn btn-success pull-right'></td></tr>";
           }
         }elseif (isset($_SESSION['usuario']) and $_SESSION['rol']!=='admin'){
           $equipo=$_SESSION['equipo'];
           while($obj = $result->fetch_object()) {
-            if ($equipo==$obj->local) {
+            if ($equipo==$obj->lo) {
               echo "<tr><td><a href='#'>$obj->local</a></td><td id='resultado'>$obj->golesL:$obj->golesV</td>
                           <td>$obj->visitante</td><td>$obj->fecha</td></tr>";
-            }elseif ($equipo==$obj->visitante) {
+            }elseif ($equipo==$obj->vi) {
               echo "<tr><td>$obj->local</td><td id='resultado'>$obj->golesL:$obj->golesV</td>
               <td><a href='#'>$obj->visitante</a></td><td>$obj->fecha</td></tr>";
             }else {
-              var_dump($equipo);
               echo "<tr><td>$obj->local</td><td id='resultado'>$obj->golesL:$obj->golesV</td>
                         <td>$obj->visitante</td><td>$obj->fecha</td></tr>";
             }
