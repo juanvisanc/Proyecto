@@ -7,13 +7,16 @@
 </head>
 <style media="screen">
   #resultado{
-    padding-left:4%;
+    padding-left:3.5%;
   }
   .form-control {
     min-width: 0;
     width: 5em;
     display: inline;
 }
+  .glyphicon-trash{
+    padding-left: 25%;
+  }
 </style>
 <script>
   $(function() {
@@ -59,6 +62,9 @@
     <div class="col-md-1"></div>
     <div class="col-md-10">
       <table class="table table-hover">
+        <?php
+          if (isset($_SESSION['usuario']) and $_SESSION['rol']=='admin') {
+            ?>
         <thead>
           <tr>
             <th>Local</th>
@@ -66,11 +72,17 @@
             <th>Goles Visitante</th>
             <th>Visitante</th>
             <th>Fecha</th>
-            <?php
-              if (isset($_SESSION['usuario']) and $_SESSION['rol']=='admin') {
-                ?>
-                <th><th>
-                  <?php } ?>
+            <th>Eliminar</th>
+            <th></th>
+        <?php }else {?>
+          <thead>
+            <tr>
+              <th>Local</th>
+              <th>Resultado</th>
+              <th>Visitante</th>
+              <th>Fecha</th>
+              <th>Localidad</th>
+        <?php } ?>
           </tr>
         </thead>
         <?php
@@ -88,34 +100,78 @@
 
           if (!isset($_SESSION['usuario'])){
           while($obj = $result->fetch_object()) {
-            echo "<tr><td>$obj->local</td><td id='resultado'>$obj->golesL</td><td id='resultado'>$obj->golesV</td>
-            <td>$obj->visitante</td><td>$obj->fecha</td></tr>";
+            echo "<tr><td>$obj->local</td><td id='resultado'>$obj->golesL:$obj->golesV</td>
+                        <td>$obj->visitante</td><td>$obj->fecha</td><td>$obj->localidad</td></tr>";
           }
+          $result = $connection->query("SELECT jornada from PARTIDO order by jornada desc limit 1;");
+          $obj = $result->fetch_object();
+          $cont=1;
+          $fin=$obj->jornada;
+            echo "<tr><th  colspan='7'>Jornadas disponibles:";
+            while ($cont<=$fin) {
+              echo "<a href='../usuario/calendario.php?id=$cont'> $cont</a>";
+              $cont=$cont+1;
+            }
+            echo "</th></tr>";
+            $result->close();
+            unset($obj);
+            unset($connection);
         }elseif (isset($_SESSION['usuario']) and $_SESSION['rol']=='admin') {
           while($obj = $result->fetch_object()) {
-            echo "<tr><td>$obj->local</td><td><input type='number' class='form-control' value='$obj->golesL' name='golesL' required></td>
-            <td><input type='text' class='form-control' value='$obj->golesV' name='golesV' min='0' required></td>
-            <td>$obj->visitante</td><td>$obj->fecha</td><td>
-            <input type='submit' name='enviar' id='submit' value='Guardar' class='btn btn-success pull-right'></td></tr>";
+            echo "<tr><form method='POST' action='../admin/guarda_resultado.php'>
+            <input type='number' value='$obj->idPartido' name='id' style='display:none' required/>
+            <input type='number' value='$id' name='jornada' style='display:none' required/>
+            <td>$obj->local</td><td><input type='number' class='form-control' value='$obj->golesL' name='golesL' required></td>
+            <td><input type='number' class='form-control' value='$obj->golesV' name='golesV' min='0' required></td>
+            <td>$obj->visitante</td><td>$obj->fecha</td>
+            <td><a href='../admin/elimina_partido.php?id=$obj->idPartido&jornada=$id'>
+            <span class='glyphicon glyphicon-trash'/></a></td>
+            <td>
+            <input type='submit' name='enviar' id='submit' value='Guardar' class='btn btn-success pull-right'>
+            </td></form></tr>";
           }
+          $result = $connection->query("SELECT jornada from PARTIDO order by jornada desc limit 1;");
+          $obj = $result->fetch_object();
+          $cont=1;
+          $fin=$obj->jornada;
+            echo "<tr><th  colspan='7'>Jornadas disponibles:";
+            while ($cont<=$fin) {
+              echo "<a href='../usuario/calendario.php?id=$cont'> $cont</a>";
+              $cont=$cont+1;
+            }
+            echo "</th></tr>";
+            $result->close();
+            unset($obj);
+            unset($connection);
         }elseif (isset($_SESSION['usuario']) and $_SESSION['rol']!=='admin'){
           $equipo=$_SESSION['equipo'];
           while($obj = $result->fetch_object()) {
             if ($equipo==$obj->lo) {
               echo "<tr><td><a href='#'>$obj->local</a></td><td id='resultado'>$obj->golesL:$obj->golesV</td>
-                          <td>$obj->visitante</td><td>$obj->fecha</td></tr>";
+                          <td>$obj->visitante</td><td>$obj->fecha</td><td>$obj->localidad</td></tr>";
             }elseif ($equipo==$obj->vi) {
               echo "<tr><td>$obj->local</td><td id='resultado'>$obj->golesL:$obj->golesV</td>
-              <td><a href='#'>$obj->visitante</a></td><td>$obj->fecha</td></tr>";
+              <td><a href='#'>$obj->visitante</a></td><td>$obj->fecha</td><td>$obj->localidad</td></tr>";
             }else {
               echo "<tr><td>$obj->local</td><td id='resultado'>$obj->golesL:$obj->golesV</td>
-                        <td>$obj->visitante</td><td>$obj->fecha</td></tr>";
+                        <td>$obj->visitante</td><td>$obj->fecha</td><td>$obj->localidad</td></tr>";
             }
           }
+          $result = $connection->query("SELECT jornada from PARTIDO order by jornada desc limit 1;");
+          $obj = $result->fetch_object();
+          $cont=1;
+          $fin=$obj->jornada;
+            echo "<tr><th  colspan='7'>Jornadas disponibles:";
+            while ($cont<=$fin) {
+              echo "<a href='../usuario/calendario.php?id=$cont'> $cont</a>";
+              $cont=$cont+1;
+            }
+            echo "</th></tr>";
+            $result->close();
+            unset($obj);
+            unset($connection);
         }
-          $result->close();
-          unset($obj);
-          unset($connection);
+
          ?>
       </table>
     </div>
