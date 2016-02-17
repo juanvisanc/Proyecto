@@ -31,7 +31,7 @@ if (isset($_SESSION['usuario'])) {
               <a href='#' class='dropdown-toggle' data-toggle='dropdown'>Administración <span class='glyphicon  glyphicon-menu-down'></span></a>
               <ul class='dropdown-menu'>
                 <li><a href='../admin/usuarios.php'>Usuarios</a></li>
-                <li><a href='#'>Equipos</a></li>
+                <li><a href='../admin/equipos.php'>Equipos</a></li>
                 <li><a href='../admin/partidos.php'>Partidos</a></li>
               </ul>
             </li>";
@@ -42,7 +42,7 @@ if (isset($_SESSION['usuario'])) {
           <ul class='nav navbar-nav navbar-right'>
             <li><a href='../colaborador/usuario.php?id=$obj->idEntrenador'><span class='glyphicon glyphicon-user' style='padding-right:5px'>
             </span>".$_SESSION['usuario']."</a></li>
-            <li><a href='../usuario/logout.php'><span class='glyphicon glyphicon-log-in'></span> Logout</a></li>
+            <li><a href='../usuario/logout.php'><span class='glyphicon glyphicon-log-out'></span> Logout</a></li>
           </ul>
         </div>
       </div>
