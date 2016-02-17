@@ -86,8 +86,8 @@
           </tr>
         </thead>
         <?php
-        $result = $connection->query("SELECT p.*, l.nombre as local,v.nombre as visitante,l.idEquipo as lo,
-          v.idEquipo as vi FROM EQUIPO l, PARTIDO p, EQUIPO v
+        $result = $connection->query("SELECT p.*, l.nombre as local,v.nombre as visitante,
+          l.idEquipo as lo,v.idEquipo as vi FROM EQUIPO l, PARTIDO p, EQUIPO v
           WHERE l.idEquipo=p.idEquipoL and p.idEquipoV=v.idEquipo and jornada=$id;");
 
           if ($result->num_rows===0) {
@@ -98,10 +98,10 @@
               </div>";
           }
 
-          if (!isset($_SESSION['usuario'])){
+          if (!isset($_SESSION['usuario']) or (isset($_SESSION['usuario']) and $_SESSION['rol']!=='admin')){
           while($obj = $result->fetch_object()) {
-            echo "<tr><td>$obj->local</td><td id='resultado'>$obj->golesL:$obj->golesV</td>
-                        <td>$obj->visitante</td><td>$obj->fecha</td><td>$obj->localidad</td></tr>";
+            echo "<tr><td><a href='../usuario/estadistica.php?idEq=$obj->lo&idP=$obj->idPartido'>$obj->local</a></td><td id='resultado'>$obj->golesL:$obj->golesV</td>
+                        <td><a href='../usuario/estadistica.php?idEq=$obj->vi&idP=$obj->idPartido'>$obj->visitante</a></td><td>$obj->fecha</td><td>$obj->localidad</td></tr>";
           }
           $result = $connection->query("SELECT jornada from PARTIDO order by jornada desc limit 1;");
           $obj = $result->fetch_object();
@@ -121,9 +121,9 @@
             echo "<tr><form method='POST' action='../admin/guarda_resultado.php'>
             <input type='number' value='$obj->idPartido' name='id' style='display:none' required/>
             <input type='number' value='$id' name='jornada' style='display:none' required/>
-            <td>$obj->local</td><td><input type='number' class='form-control' value='$obj->golesL' name='golesL' required></td>
+            <td><a href='../usuario/estadistica.php?idEq=$obj->lo&idP=$obj->idPartido'>$obj->local</a></td><td><input type='number' class='form-control' value='$obj->golesL' name='golesL' required></td>
             <td><input type='number' class='form-control' value='$obj->golesV' name='golesV' min='0' required></td>
-            <td>$obj->visitante</td><td>$obj->fecha</td>
+            <td><a href='../usuario/estadistica.php?idEq=$obj->vi&idP=$obj->idPartido'>$obj->visitante</a></td><td>$obj->fecha</td>
             <td><a href='../admin/elimina_partido.php?id=$obj->idPartido&jornada=$id'>
             <span class='glyphicon glyphicon-trash'/></a></td>
             <td>
@@ -143,34 +143,9 @@
             $result->close();
             unset($obj);
             unset($connection);
-        }elseif (isset($_SESSION['usuario']) and $_SESSION['rol']!=='admin'){
-          $equipo=$_SESSION['equipo'];
-          while($obj = $result->fetch_object()) {
-            if ($equipo==$obj->lo) {
-              echo "<tr><td><a href='#'>$obj->local</a></td><td id='resultado'>$obj->golesL:$obj->golesV</td>
-                          <td>$obj->visitante</td><td>$obj->fecha</td><td>$obj->localidad</td></tr>";
-            }elseif ($equipo==$obj->vi) {
-              echo "<tr><td>$obj->local</td><td id='resultado'>$obj->golesL:$obj->golesV</td>
-              <td><a href='#'>$obj->visitante</a></td><td>$obj->fecha</td><td>$obj->localidad</td></tr>";
-            }else {
-              echo "<tr><td>$obj->local</td><td id='resultado'>$obj->golesL:$obj->golesV</td>
-                        <td>$obj->visitante</td><td>$obj->fecha</td><td>$obj->localidad</td></tr>";
-            }
-          }
-          $result = $connection->query("SELECT jornada from PARTIDO order by jornada desc limit 1;");
-          $obj = $result->fetch_object();
-          $cont=1;
-          $fin=$obj->jornada;
-            echo "<tr><th  colspan='7'>Jornadas disponibles:";
-            while ($cont<=$fin) {
-              echo "<a href='../usuario/calendario.php?id=$cont'> $cont</a>";
-              $cont=$cont+1;
-            }
-            echo "</th></tr>";
-            $result->close();
-            unset($obj);
-            unset($connection);
         }
+            echo "</th></tr>";
+
 
          ?>
       </table>
