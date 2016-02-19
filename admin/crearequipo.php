@@ -45,8 +45,8 @@ if ($_FILES["imagen"]["error"] > 0){
               $resultado = @move_uploaded_file($_FILES["imagen"]["tmp_name"], $ruta);
 
               if ($resultado){
-                echo "el archivo ha sido movido exitosamente";
                 $result = $connection->query("INSERT INTO EQUIPO VALUES($idE,'$nombre','$localidad');");
+                header('Location: ../admin/equipos.php');
               } else {
                 echo "ocurrio un error al mover el archivo.";
               }
