@@ -105,7 +105,7 @@ $(document).ready(function(){
                   placeholder="Usuario" required>
                   <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
                 </div>
-                <div id='error'></div>
+                <div id='error'>Usuario</div>
                 <label for="InputPassword">Contraseña</label>
                 <div class="input-group">
                   <input type="password" class="form-control" name="password" placeholder="Contraseña" required>
