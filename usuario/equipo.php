@@ -33,6 +33,7 @@
      ?>
     <?php include 'include.php' ?>
       <div class="row">
+        <div class="col-md-2"></div>
         <div class="col-md-8">
           <?php
         $connection = new mysqli("localhost", "usufutbol", "usufutbol", "futbol2");
@@ -65,7 +66,7 @@
           }
 
         ?>
-            <table class="table table-hover">
+            <table class="table table-hover text-center">
               <thead>
                 <tr>
                   <th>Apellidos</th>
@@ -140,7 +141,6 @@
 
         ?>
         </div>
-        <div class="col-md-4">Clasificacion Último partido y próximo</div>
       </div>
       <footer class="container-fluid text-center">
         <p>Esta página está basada en la colaboración voluntaria, por lo que no se hace responsable de la veracidad de los contenidos publicados.</p>

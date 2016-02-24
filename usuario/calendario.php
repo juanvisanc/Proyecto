@@ -6,16 +6,13 @@
     <link rel="stylesheet" type="text/css" href="./css/registro.css">
 </head>
 <style media="screen">
-  #resultado{
-    padding-left:3.5%;
-  }
   .form-control {
     min-width: 0;
     width: 5em;
     display: inline;
 }
-  .glyphicon-trash{
-    padding-left: 25%;
+  th{
+    text-align: center;
   }
 </style>
 <script>
@@ -61,7 +58,7 @@
     </div>
     <div class="col-md-1"></div>
     <div class="col-md-10">
-      <table class="table table-hover">
+      <table class="table table-hover text-center">
         <?php
           if (isset($_SESSION['usuario']) and $_SESSION['rol']=='admin') {
             ?>

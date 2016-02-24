@@ -35,8 +35,8 @@
                 <th>Correo</th>
                 <th>Rol</th>
                 <th>Equipo</th>
-                <th>Editar</th>
-                <th>Eliminar<th>
+                <th class="text-center">Editar</th>
+                <th class="text-center">Eliminar<th>
               </tr>
             </thead>
 
@@ -63,9 +63,9 @@
                       echo "<td>".$obj3->nombre."</td>";
 
                     }
-                    echo "<td><a href='../admin/editausu.php?id=$obj->idEntrenador'>
+                    echo "<td class='text-center'><a href='../admin/editausu.php?id=$obj->idEntrenador'>
                     <span class='glyphicon glyphicon-edit'/></a></td>";
-                    echo "<td><a href='../admin/eliminausu.php?id=$obj->idEntrenador'>
+                    echo "<td class='text-center'><a href='../admin/eliminausu.php?id=$obj->idEntrenador'>
                     <span class='glyphicon glyphicon-trash'/></a></td></tr>";
                 }
                 echo "<tr>";
@@ -75,8 +75,8 @@
                 echo "<td></td>";
                 echo "<td></td>";
                 echo "<td></td>";
-                echo "<th>Añadir</th>";
-                echo "<td><a href='creausu.php'>
+                echo "<th class='text-center'>Añadir</th>";
+                echo "<td class='text-center'><a href='creausu.php'>
                 <span class='glyphicon glyphicon-plus'/></a></td></tr>";
                 echo "</table>";
 

@@ -29,13 +29,9 @@ img{
   width: 15%;
   margin-right: 5%;
 }
+th{
+  text-align: center;
+}
 .col-xs-3{
   margin-bottom: 5%;
-}
-
-.glyphicon-eye-open,
-.glyphicon-edit,
-.glyphicon-trash,
-.glyphicon-plus{
-  margin-left: 20%;
 }

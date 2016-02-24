@@ -23,7 +23,7 @@ if (isset($_SESSION['usuario'])) {
         <div class='collapse navbar-collapse' id='myNavbar'>
           <ul class='nav navbar-nav'>
             <li><a href='../usuario/index.php'>Inicio</a></li>
-            <li><a href='#'>Clasificación</a></li>
+            <li><a href='../usuario/clasificaciion.php'>Clasificación</a></li>
             <li><a href='../usuario/calendario.php?id=1'>Calendario</a></li>";
             if ($_SESSION['rol']==='admin') {
               echo "

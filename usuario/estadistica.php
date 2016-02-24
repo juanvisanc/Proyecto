@@ -6,9 +6,7 @@
   width: 5em;
   display: inline;
 }
-#jugador{
-  width: 20%;
-}
+
 
 </style>
 <head>
@@ -66,14 +64,14 @@
           <hr>
         </div>
         <div class="col-md-6">
-          <table class="table table-hover">
+          <table class="table table-hover text-center">
           <thead>
             <tr>
-              <th>Jugador</th>
-              <th>Goles</th>
-              <th>Tarjetas Amarilla</th>
-              <th>Tarjetas Rojas</th>
-              <th></th>
+              <th class="text-center">Jugador</th>
+              <th class="text-center">Goles</th>
+              <th class="text-center">Tarjetas Amarilla</th>
+              <th class="text-center">Tarjetas Rojas</th>
+              <th class="text-center"></th>
             </tr>
           </thead>
           <?php
@@ -101,13 +99,13 @@
         </div>
         <div class="col-md-1"></div>
         <div class="col-md-5">
-          <table class="table table-hover">
+          <table class="table table-hover text-center">
           <thead>
             <tr>
-              <th>Jugador</th>
-              <th>Goles</th>
-              <th>Tarjetas Amarilla</th>
-              <th>Tarjetas Rojas</th>
+              <th class="text-center">Jugador</th>
+              <th class="text-center">Goles</th>
+              <th class="text-center">Tarjetas Amarilla</th>
+              <th class="text-center">Tarjetas Rojas</th>
             </tr>
           </thead>
           <?php
@@ -139,13 +137,13 @@
       </div>
       <div class="col-md-3"></div>
       <div class="col-md-6">
-        <table class="table table-hover">
+        <table class="table table-hover text-center">
         <thead>
           <tr>
-            <th>Jugador</th>
-            <th>Goles</th>
-            <th>Tarjetas Amarilla</th>
-            <th>Tarjetas Rojas</th>
+            <th class="text-center">Jugador</th>
+            <th class="text-center">Goles</th>
+            <th class="text-center">Tarjetas Amarilla</th>
+            <th class="text-center">Tarjetas Rojas</th>
             <th></th>
           </tr>
         </thead>
@@ -176,13 +174,13 @@
       </div>
       <div class="col-md-3"></div>
       <div class="col-md-6">
-        <table class="table table-hover">
+        <table class="table table-hover text-center">
         <thead>
           <tr>
-            <th>Jugador</th>
-            <th>Goles</th>
-            <th>Tarjetas Amarilla</th>
-            <th>Tarjetas Rojas</th>
+            <th class="text-center">Jugador</th>
+            <th class="text-center">Goles</th>
+            <th class="text-center">Tarjetas Amarilla</th>
+            <th class="text-center">Tarjetas Rojas</th>
             <th></th>
           </tr>
         </thead>

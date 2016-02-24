@@ -35,13 +35,7 @@ if ($_FILES["imagen"]["error"] > 0){
             //en el mismo lugar donde se encuentra el archivo subir.php
             $ruta = "../imagenes/" . $idE.".png";
             var_dump($ruta);
-            //comprovamos si este archivo existe para no volverlo a copiar.
-            //pero si quieren pueden obviar esto si no es necesario.
-            //o pueden darle otro nombre para que no sobreescriba el actual.
-            if (!file_exists($ruta)){
-              //aqui movemos el archivo desde la ruta temporal a nuestra ruta
-              //usamos la variable $resultado para almacenar el resultado del proceso de mover el archivo
-              //almacenara true o false
+
               $resultado = @move_uploaded_file($_FILES["imagen"]["tmp_name"], $ruta);
 
               if ($resultado){
@@ -50,9 +44,6 @@ if ($_FILES["imagen"]["error"] > 0){
               } else {
                 echo "ocurrio un error al mover el archivo.";
               }
-            } else {
-              echo $_FILES['imagen']['name'] . ", este archivo existe";
-            }
           } else {
             echo "archivo no permitido, es tipo de archivo prohibido o excede el tamano de $limite_kb Kilobytes";
           }

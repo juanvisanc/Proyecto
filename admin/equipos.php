@@ -32,8 +32,8 @@
               <tr>
                 <th>Nombre</th>
                 <th>Localidad</th>
-                <th>Editar</th>
-                <th>Eliminar<th>
+                <th class="text-center">Editar</th>
+                <th class="text-center">Eliminar<th>
               </tr>
             </thead>
 
@@ -44,16 +44,16 @@
                     echo "<tr>";
                     echo "<td>".$obj->nombre."</td>";
                     echo "<td>".$obj->localidad."</td>";
-                    echo "<td><a href='editaequipo.php?id=$obj->idEquipo'>
+                    echo "<td class='text-center'><a href='editaequipo.php?id=$obj->idEquipo'>
                     <span class='glyphicon glyphicon-edit'/></a></td>";
-                    echo "<td><a href='eliminaequipo.php?id=$obj->idEquipo'>
+                    echo "<td class='text-center'><a href='eliminaequipo.php?id=$obj->idEquipo'>
                     <span class='glyphicon glyphicon-trash'/></a></td></tr>";
                 }
                 echo "<tr>";
                 echo "<td></td>";
                 echo "<td></td>";
-                echo "<th>Añadir</th>";
-                echo "<td><a href='equipo_nuevo.php'>
+                echo "<th class='text-center'>Añadir</th>";
+                echo "<td class='text-center'><a href='equipo_nuevo.php'>
                 <span class='glyphicon glyphicon-plus'/></a></td></tr>";
                 echo "</table>";
 
