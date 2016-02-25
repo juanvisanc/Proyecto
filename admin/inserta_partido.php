@@ -1,6 +1,7 @@
 <?php
     session_start();
 
+    //si es admin y ademas se ha pasado por post 
     if (isset($_SESSION['usuario']) and $_SESSION['rol']==='admin' and isset($_POST['local'])) {
     $connection = new mysqli("localhost", "usufutbol", "usufutbol", "futbol2");
     mysqli_set_charset($connection, "utf8");

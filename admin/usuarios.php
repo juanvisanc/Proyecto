@@ -8,6 +8,8 @@
     <?php
         include '../colaborador/include.php';
 
+
+        //solo puede acceder el admin
         if (isset($_SESSION['usuario']) and $_SESSION['rol']==='admin') {
 
             $connection = new mysqli("localhost", "usufutbol", "usufutbol", "futbol2");

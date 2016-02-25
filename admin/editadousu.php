@@ -2,6 +2,8 @@
     <?php
         session_start();
 
+
+        //solo si eres admin y se han pasado por post
         if (isset($_POST['id']) and isset($_SESSION["usuario"])) {
           if($_SESSION['rol']==='admin'){
             $connection = new mysqli("localhost", "usufutbol", "usufutbol", "futbol2");
@@ -21,6 +23,8 @@
             $rol=$_POST['rol'];
             $equipo=$_POST['equipo'];
 
+
+            //Hay que averiguar si se ha cambiado de rol para borrar, insertar o actualizar
             if ($rol==='admin' or $rol==='entrenador') {
               $result = $connection->query("SELECT * FROM Colabora WHERE idEntrenador=$id;");
               if ($result->num_rows===1) {

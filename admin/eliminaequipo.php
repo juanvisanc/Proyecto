@@ -1,6 +1,8 @@
 <?php
   session_start();
 
+
+  //si se ha pasado el id del equipo que se va a eliminar y si es admin
   if (isset($_GET['id']) and isset($_SESSION['usuario']) and $_SESSION['rol']==='admin') {
     $connection = new mysqli("localhost", "usufutbol", "usufutbol", "futbol2");
     //$conection->set_charset("utf8");

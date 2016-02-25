@@ -10,6 +10,7 @@
     margin-bottom: 0.4em;
   }
 </style>
+<!--script para mostrar equipos segun sea entrenador o colaborador-->
 <script>
 $(document).ready(function(){
 	$("#admin").click(function(){

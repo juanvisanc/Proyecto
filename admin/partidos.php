@@ -10,6 +10,8 @@
   <?php
         include '../colaborador/include.php';
 
+
+        //solo entra si es admin
         if (isset($_SESSION['usuario']) and $_SESSION['rol']==='admin') {
         $connection = new mysqli("localhost", "usufutbol", "usufutbol", "futbol2");
         mysqli_set_charset($connection, "utf8");

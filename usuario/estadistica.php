@@ -35,12 +35,17 @@
   <?php include 'include.php'; ?>
 
       <?php
+
+      //si no existe idequipo vuelta atras
       if (!isset($_GET['idEq'])) {
         header('Location: index.php');
       }
+
+      //si no existe idpartido vuelta atras
       if (!isset($_GET['idP'])) {
         header('Location: index.php');
       }
+
       $connection = new mysqli("localhost", "usufutbol", "usufutbol", "futbol2");
            //$conection->set_charset("utf8");
       mysqli_set_charset($connection, "utf8");
@@ -52,10 +57,14 @@
       $idE=$_GET['idEq'];
       $idP=$_GET['idP'];
 
+      //sacamos el nombre del equipo para titulo
       $result = $connection->query("SELECT nombre FROM EQUIPO where idEquipo=$idE;");
       $obj = $result->fetch_object();
 
+      //si esta logueado
       if(isset($_SESSION["usuario"])){
+
+        //si es admin o su equipo es el que hemos pasado podrá editar las estadisticas
         if($_SESSION["rol"]==='admin' or $_SESSION["equipo"]===$idE){
       ?>
       <div class="row">
@@ -75,6 +84,8 @@
             </tr>
           </thead>
           <?php
+
+          //en un lado todos los jugadores y en el otro las estadisticas
           $result = $connection->query("SELECT * from JUGADOR
             where idEquipo=$idE and idJugador not in(
               SELECT ju.idJugador FROM JUGADOR ju,Juego j
@@ -128,6 +139,8 @@
 
 
       <?php
+
+      //si esta logueado pero no es admin ni es su equipo
     }else {
     ?>
     <div class="row">
@@ -166,6 +179,8 @@
     </div>
 
     <?php }
+
+    //en caso de no estar logueado solo podra ver las estadisticas
   }else { ?>
     <div class="row">
       <div class="col-md-12">

@@ -1,6 +1,7 @@
 <?php
   session_start();
 
+  //si se pasa el id de partido y se es admin
   if (isset($_GET['id']) and isset($_GET['jornada']) and isset($_SESSION["usuario"])) {
     if($_SESSION['rol']==='admin'){
       $connection = new mysqli("localhost", "usufutbol", "usufutbol", "futbol2");
@@ -16,7 +17,7 @@
       $jornada=$_GET['jornada'];
 
       $result = $connection->query("DELETE FROM PARTIDO WHERE idPartido=$id;");
-
+      
 
       unset($connection);
 

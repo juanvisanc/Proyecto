@@ -8,6 +8,8 @@
     <?php
 
     include '../colaborador/include.php';
+
+    //solo entramos si somos admin y hemos pasado id del entrenador a editar
     if (isset($_GET['id']) and isset($_SESSION["usuario"]) and $_SESSION['rol']==='admin' ) {
       $connection = new mysqli("localhost", "usufutbol", "usufutbol", "futbol2");
       //$conection->set_charset("utf8");
@@ -18,9 +20,13 @@
         exit();
       }
       $entrenador=$_GET['id'];
+
+      //sacamos los datos del entrenador para ponerlos en los value
       $result = $connection->query("SELECT * from ENTRENADOR WHERE idEntrenador=$entrenador;");
       $obj = $result->fetch_object();
       ?>
+
+      <!--si es admin o entrenador va a estar checked y mostrara uno u otros equipo-->
       <?php if ($obj->rol==='admin' or $obj->rol==='entrenador'): ?>
       <script>
       $(document).ready(function(){
@@ -49,6 +55,8 @@
        	});
 
       </script>
+
+      <!--si es colaborador-->
     <?php else: ?>
       <script>
       $(document).ready(function(){
@@ -184,6 +192,8 @@
               <div class="col-xs-12">
                 <label for="InputCity">Equipo</label>
                 <?php
+
+                //sacamos los equipos disponibles para colaborador
               $result2 = $connection->query("SELECT * FROM EQUIPO
                 WHERE idEquipo NOT IN (SELECT idEquipo FROM Colabora);");
           ?>
@@ -191,12 +201,20 @@
                   <div class="input-group">
                     <select name="equipo" class="form-control" id='uno' required>
                       <?php
+
+                      //si es colaborador
                       if ($obj->rol==='colaborador') {
+
+
                       $result3 = $connection->query("SELECT e.idEquipo,e.nombre FROM Colabora c, EQUIPO e
                         WHERE c.idEquipo=e.idEquipo and c.idEntrenador=$entrenador;");
                         $obj3=$result3->fetch_object();
+
+                        //por defecto equipo que ya tenia
                         echo"<option value='$obj3->idEquipo' selected='selected'>$obj3->nombre</option>";
                       }
+
+                      //aqui es donde ponemos los equipos disponibles
                 while($obj2 = $result2->fetch_object()) {
                     echo"<option value='$obj2->idEquipo'>$obj2->nombre</option>";
                 }
@@ -213,6 +231,8 @@
                 <?php
                 $result2->close();
                 unset($obj2);
+
+                //cogemos los equipos disponibles para entrenador
               $result3 = $connection->query("SELECT * FROM EQUIPO
                 WHERE idEquipo NOT IN (SELECT idEquipo FROM Entrena);");
           ?>
@@ -221,9 +241,13 @@
                     <select name="equipo" class="form-control" id='dos' required>
                       <?php
                       if ($obj->rol==='entrenador' or $obj->rol==='admin') {
+
+                        //vemos el equuipo que tiene el usuario
                       $result4 = $connection->query("SELECT e.idEquipo,e.nombre FROM Entrena en, EQUIPO e
                         WHERE en.idEquipo=e.idEquipo and en.idEntrenador=$entrenador ");
                         $obj4=$result4->fetch_object();
+
+                        //por defecto el equipo que tenia
                         echo"<option value='$obj4->idEquipo' selected='selected'>$obj4->nombre</option>";
                         $result4->close();
                         unset($obj4);

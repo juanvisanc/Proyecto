@@ -27,6 +27,8 @@
             $rol=$_POST['rol'];
             $equipo=$_POST['equipo'];
 
+            //hay que insertar en dos tablas, entrenador y entrena o colabora
+
             $connection->query("INSERT INTO ENTRENADOR VALUES
                   (NULL,'$nombre','$apellidos','$correo','$nombreUsu',md5('$pass'),'$rol');");
                   $result3=$connection->query("SELECT idEntrenador FROM ENTRENADOR WHERE nombreUsu='$nombreUsu';" );

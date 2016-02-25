@@ -15,6 +15,8 @@
     text-align: center;
   }
 </style>
+
+<!-- script para el dialog-->
 <script>
   $(function() {
     $("#dialog-message").dialog({
@@ -33,7 +35,7 @@
 <body>
 
   <?php
-    //Para entrar en esta página hay que mandar id del equipo, si no para atras.
+    //Para entrar en esta página hay que mandar la jornada
     if (!isset($_GET['id'])) {
       header('Location: index.php');
     }
@@ -60,6 +62,8 @@
     <div class="col-md-10">
       <table class="table table-hover text-center">
         <?php
+
+        //si se es admin
           if (isset($_SESSION['usuario']) and $_SESSION['rol']=='admin') {
             ?>
         <thead>
@@ -71,7 +75,9 @@
             <th>Fecha</th>
             <th>Eliminar</th>
             <th></th>
-        <?php }else {?>
+        <?php
+        //si no es admin
+       }else {?>
           <thead>
             <tr>
               <th>Local</th>
@@ -83,6 +89,8 @@
           </tr>
         </thead>
         <?php
+
+
         $result = $connection->query("SELECT p.*, l.nombre as local,v.nombre as visitante,
           l.idEquipo as lo,v.idEquipo as vi FROM EQUIPO l, PARTIDO p, EQUIPO v
           WHERE l.idEquipo=p.idEquipoL and p.idEquipoV=v.idEquipo and jornada=$id;");
@@ -95,11 +103,14 @@
               </div>";
           }
 
+          //si no esta logueado o esta logueado pero no es admin solo podra ver y enlazar
           if (!isset($_SESSION['usuario']) or (isset($_SESSION['usuario']) and $_SESSION['rol']!=='admin')){
           while($obj = $result->fetch_object()) {
             echo "<tr><td><a href='../usuario/estadistica.php?idEq=$obj->lo&idP=$obj->idPartido'>$obj->local</a></td><td id='resultado'>$obj->golesL:$obj->golesV</td>
                         <td><a href='../usuario/estadistica.php?idEq=$obj->vi&idP=$obj->idPartido'>$obj->visitante</a></td><td>$obj->fecha</td><td>$obj->localidad</td></tr>";
           }
+
+          //sacamos todas las jornadas disponibles para poder linkearlas
           $result = $connection->query("SELECT jornada from PARTIDO order by jornada desc limit 1;");
           $obj = $result->fetch_object();
           $cont=1;
@@ -113,6 +124,8 @@
             $result->close();
             unset($obj);
             unset($connection);
+
+            //si es admin
         }elseif (isset($_SESSION['usuario']) and $_SESSION['rol']=='admin') {
           while($obj = $result->fetch_object()) {
             echo "<tr><form method='POST' action='../admin/guarda_resultado.php'>

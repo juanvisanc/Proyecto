@@ -11,6 +11,9 @@
     margin-bottom: 0.4em;
   }
 </style>
+
+<!--script para el dialog y para mostrar los equipos dependiendo del rol
+Tambien para comprobar si el nombre de usuario es válido-->
 <script>
   $(function() {
     $("#dialog-message").dialog({
@@ -72,6 +75,7 @@
         exit();
       }
       ?>
+      <!--Si no se han madado los datos del formulario lo mostramos-->
       <?php if (!isset($_POST['nombre'])): ?>
         <?php include 'include.php';
       if (isset($_SESSION["usuario"])) {
@@ -219,6 +223,8 @@
         <footer class="container-fluid text-center">
           <p>Esta página está basada en la colaboración voluntaria, por lo que no se hace responsable de la veracidad de los contenidos publicados.</p>
         </footer>
+
+        <!--si se han mandado los datos del formulario-->
         <?php else: ?>
           <?php
               $nombre=$_POST['nombre'];
@@ -229,7 +235,10 @@
               $entrenador=$_POST['entrenador'];
               $equipo=$_POST['equipo'];
 
+              //si es entrenador
                 if ($entrenador=='entrenador') {
+
+                  //insertamos en las tabla entrenador y entrena
                     $connection->query("INSERT INTO ENTRENADOR VALUES
                       (NULL,'$nombre','$apellidos','$email','$usuario',md5('$pass'),'$entrenador');");
                     $result3=$connection->query("SELECT idEntrenador FROM ENTRENADOR WHERE nombreUsu='$usuario';" );
@@ -237,13 +246,20 @@
                     $connection->query("INSERT INTO Entrena VALUES ($obj3->idEntrenador,$equipo);");
                     $result3->close();
                     unset($obj3);
+
+                    //iniciamos la sesion
                     session_start();
+
+                    //metemos en sesion las variables
                     $_SESSION["rol"]=$entrenador;
                     $_SESSION["usuario"]=$usuario;
                     $_SESSION["language"]="es";
                     $_SESSION["equipo"]=$equipo;
 
+                    //con la sesion iniciada vamos al inicio
                     header('Location: index.php');
+
+                    //en caso de que sea colaborador igual que con entrenador
                   }else {
                   $result2 = $connection->query("SELECT c.idEquipo FROM Colabora c
                     WHERE c.idEquipo=$equipo;");

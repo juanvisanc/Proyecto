@@ -1,6 +1,7 @@
 <?php
     session_start();
 
+    //Si se pasa id de partido y usuario es admin
     if (isset($_POST['id']) and isset($_SESSION["usuario"])) {
       if($_SESSION['rol']==='admin'){
         $connection = new mysqli("localhost", "usufutbol", "usufutbol", "futbol2");

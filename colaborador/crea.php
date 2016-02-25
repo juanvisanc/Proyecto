@@ -8,11 +8,15 @@
     <?php
       include 'include.php';
 
+      //si hemos pasado id y ademas estamos logueados
       if (isset($_GET['id']) and isset($_SESSION["usuario"])){
 
         $equipo=$_GET['id'];
+
+        //le hemos pasado el equipo del jugador para poder comprobar si es del usuario
         $equipoUsu=$_SESSION['equipo'];
 
+        //si el equipo es del usuario o es admin
         if ($equipo===$equipoUsu or $_SESSION['rol']==='admin'){
           ?>
           <div class="row">

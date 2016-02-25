@@ -16,6 +16,8 @@
     <?php
 
     include '../colaborador/include.php';
+
+    //si hay id del equipo y es admin el usuario
     if (isset($_GET['id'])) {
         if (isset($_SESSION["usuario"]) and $_SESSION['rol']==='admin' ) {
           $connection = new mysqli("localhost", "usufutbol", "usufutbol", "futbol2");
@@ -27,6 +29,8 @@
             exit();
           }
           $equipo=$_GET['id'];
+
+          //sacamos datos del equipo para ponerlos en los values
           $result= $connection->query("SELECT * FROM EQUIPO where idEquipo=$equipo;");
           $obj=$result->fetch_object();
           ?>

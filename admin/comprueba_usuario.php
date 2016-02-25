@@ -1,5 +1,7 @@
 
     <?php
+
+    //para llamada ajax
     if (isset($_POST['usuario'])) {
       $connection = new mysqli("localhost", "usufutbol", "usufutbol", "futbol2");
       //$conection->set_charset("utf8");
